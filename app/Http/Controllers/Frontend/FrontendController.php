@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Models\Clothe;
 use App\http\Controllers\Controller;
-use App\Models\Buy;
+use App\Models\Address;
 use App\Models\Cart;
 use App\Models\SubCollection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FrontendController extends Controller
 {
@@ -24,7 +25,7 @@ class FrontendController extends Controller
         // return $subCollection;
         return view('Layouts.home', compact('products', 'subCollection'));
     }
-    
+
     public function productDetail($id)
     {
         $products = Clothe::with('productImages', 'subCollection')->where('id', $id)->get();
@@ -34,20 +35,23 @@ class FrontendController extends Controller
 
     public function cart()
     {
-        $cartProducts = Cart::with('clothe', 'color', 'size')->get();
-        $cartPriceTotal = Cart::get();
+        if (Auth::check()) {
+            $cartProducts = Cart::where('user_id', auth()->user()->id)->with('clothe', 'color', 'size')->get();
+            $cartPriceTotal = Cart::where('user_id', auth()->user()->id)->get();
 
-        $total = null;
-        foreach ($cartPriceTotal as $key => $price) {
-            $total += $price->price * $price->quantity;
+            $total = null;
+            foreach ($cartPriceTotal as $key => $price) {
+                $total += $price->price * $price->quantity;
+            }
+            return view('Layouts.cart', compact('cartProducts', 'total'));
         }
-        return view('Layouts.cart', compact('cartProducts', 'total'));
+        return redirect()->route('user.login');
     }
 
     public function postCart($request, $id)
     {
-        // return $request->all();
         Cart::create([
+            'user_id' => Auth::user()->id,
             'clothe_id' => $id,
             'size_id' => $request->size,
             'color_id' => $request->color,
@@ -88,28 +92,36 @@ class FrontendController extends Controller
         return redirect()->back();
     }
 
-    public function buyNow($id)
+    public function checkout()
     {
+        // return Auth::user();
+        $items = Cart::with('clothe', 'color', 'size')->where('user_id', Auth::user()->id)->get();
+        $products = null;
+
+        $cartPriceTotal = Cart::where('user_id', Auth::user()->id)->get();
+        $total = null;
+        $prices = Cart::where('user_id', Auth::user()->id)->get();
+        foreach ($cartPriceTotal as $key => $price) {
+            $total += $price->price * $price->quantity;
+        }
+
+        $address = Address::where('user_id', auth()->user()->id)->first();
+
+        return view('Layouts.checkout', compact('items', 'products', 'total', 'address'));
     }
 
-    public function postBuy($request, $id)
+    public function checkout2($request, $id)
     {
-        Buy::create([
-            'clothe_id' => $id,
-            'size_id' => $request->size,
-            'color_id' => $request->color,
-            'quantity' => $request->quantity,
-            'price' => '5200',
-        ]);
-
-        return view('Layouts.buy');
+        $products = Clothe::whereId($id)->with('color', 'size', 'productImages')->get();
+        $address = null;
+        return view('Layouts.checkout', compact('request', 'products', 'address'));
     }
 
     public function check(Request $request, $id)
     {
         switch ($request->input('action')) {
             case 'buy_now':
-                return $this->postBuy($request, $id);
+                return $this->checkout2($request, $id);
                 break;
 
             case 'add_to_cart':
@@ -118,9 +130,51 @@ class FrontendController extends Controller
         }
     }
 
+    public function category($id)
+    {
+        $products = Clothe::where('sub_collection_id', $id)->paginate(15);
 
+        return view('Layouts.category', compact('products'));
+    }
 
+    public function completeOrder(Request $request)
+    {
 
+        $request->validate([
+            'first_name' => 'required|min:2|max:15',
+            'last_name' => 'required|min:2|max:15',
+            'email' => 'required|email',
+            'address' => 'required',
+            'country' => 'required',
+            'city' => 'required',
+            'zip_code' => 'required',
+            'phone_number' => 'required|numeric|min:11',
+        ]);
+
+        $is_exist = Address::where('user_id', Auth::user()->id)->first();
+        $is_exist = isset($is_exist) ? 1 : 0;
+        // return $request->all();
+        if ($request->save_information) {
+            if (!$is_exist) {
+                $address = Address::create([
+                    'user_id' => Auth::user()->id,
+                    'transaction_type' => $request->trans_type,
+                    'first_name' => $request->first_name,
+                    'last_name' => $request->last_name,
+                    'email' => $request->email,
+                    'address' => $request->address,
+                    'address_2' => $request->address_optional,
+                    'country' => $request->country,
+                    'city' => $request->city,
+                    'zip_code' => $request->zip_code,
+                    'phone' => $request->phone_number,
+                    'email_offers' => $request->email_offers,
+                    'save_information' => $request->save_information,
+                ]);
+            }
+        }
+        return $request->all();
+    }
 
     /**
      * Show the form for creating a new resource.

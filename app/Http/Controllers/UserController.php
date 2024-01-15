@@ -30,8 +30,55 @@ class UserController extends Controller
 
     public function dashboard()
     {
-        // return 'hello';
         return view('admin.main');
+    }
+
+    public function frontLogin()
+    {
+        return view('Layouts.login');
+    }
+
+    public function frontSignup()
+    {
+        return view('Layouts.signup');
+    }
+
+    public function postFrontLogin(Request $request)
+    {
+        $data = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
+
+        $credentials = array_merge($data, ['user_type' => 2]);
+        if (Auth::attempt($credentials)) {
+            toastr()->addSuccess('Login Successfully');
+            return redirect()->route('user.homeSection');
+        }
+        toastr()->closeButton(true)->closeHtml('⛑')->addError('Something Went Wrong');
+        return redirect()->back()->withInput();
+    }
+
+    public function postFrontSignup(Request $request)
+    {
+        $data = $request->validate([
+            'first_name' => 'required',
+            'second_name' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:6|confirmed',
+        ]);
+
+        if ($data) {
+            User::create([
+                'first_name' => $request->first_name,
+            'second_name' => $request->second_name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            ]);
+
+            return redirect()->route('user.login');
+        }
+        return redirect()->back()->withInput();
     }
 
     public function login()

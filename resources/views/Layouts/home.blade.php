@@ -18,10 +18,13 @@
         </div>
 
         <div class="collection my-5">
+            <div class="container home_section_name my-5">
+                <h1 style="font-size: 3rem;text-align: center;">CATEGORIES</h1>
+            </div>
             <div class="subCollection_container">
                 @foreach ($subCollection as $product)
                     <div class="subCollection">
-                        <a href="{{ route('user.productDetail', $product->id) }}" class="text-decoration-none">
+                        <a href="{{ route('user.category', $product->id) }}" class="text-decoration-none">
                             <div class="product_card" style="height: 30rem;">
                                 <img src="{{ asset($product->image) }}" class="product_image" alt="">
                             </div>

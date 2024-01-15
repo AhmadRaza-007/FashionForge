@@ -101,7 +101,10 @@
                 </ul>
             </nav>
             <?php
-            $cart_count = App\Models\Cart::count();
+            $cart_count = 0;
+            if (Auth::check()) {
+                $cart_count = App\Models\Cart::where('user_id', auth()->user()->id)->count();
+            }
             ?>
             <div class="d-flex">
                 <div class="search mx-3 d-flex">

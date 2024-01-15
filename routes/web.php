@@ -1,16 +1,11 @@
 <?php
 
-use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ClotheController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\Frontend\FrontendController;
 use App\Http\Controllers\Frontend\SectionController;
-use App\Http\Controllers\IndexController;
 use App\Http\Controllers\SubCollectionController;
 use App\Http\Controllers\UserController;
-use App\Models\Clothe;
-use App\Models\Collection;
-use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,8 +24,15 @@ use Illuminate\Support\Facades\Route;
 // });
 
 
+Route::get('/login', [UserController::class, 'frontLogin'])->name('user.login');
+Route::post('/post/login', [UserController::class, 'postFrontLogin'])->name('user.postLogin');
+Route::get('/signup', [UserController::class, 'frontSignup'])->name('user.signup');
+Route::post('/post/signup', [UserController::class, 'postFrontSignup'])->name('user.postSignup');
+
 Route::redirect('/', '/home', 301);
 Route::get('/home', [FrontendController::class, 'index'])->name('user.homeSection');
+Route::get('/category/{id}', [FrontendController::class, 'category'])->name('user.category');
+Route::post('/completeOrder', [FrontendController::class, 'completeOrder'])->name('user.completeOrder');
 Route::get('/womenSection', [SectionController::class, 'index'])->name('user.womenSection');
 Route::get('/womenSection/{id}', [SectionController::class, 'womenSection'])->name('user.womenSectionById');
 Route::get('/productDetail/{id}', [FrontendController::class, 'productDetail'])->name('user.productDetail');
@@ -48,7 +50,7 @@ Route::prefix('admin')->group(function () {
     Route::post('/postLogin', [UserController::class, 'postLogin'])->name('admin.postLogin');
 });
 
-Route::group(['middleware' => 'auth'], function () {
+Route::group(['middleware' => 'auth', 'middleware' => 'AdminCheck'], function () {
     Route::prefix('admin')->group(function () {
 
         //////////////////////////////  For Collection  //////////////////////////////////
@@ -85,5 +87,5 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 
-Route::get('{slug}', [UserController::class, 'slug'])->name('slug');
-
+Route::get('checkout', [FrontendController::class, 'Checkout'])->name('cart.checkout');
+// Route::get('factorial/{num}', [FrontendController::class, 'factorial'])->name('slug');

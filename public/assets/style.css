@@ -354,7 +354,7 @@ footer {
     transition: 0.4s;
 }
 
-.products a:hover .product_image{
+.products a:hover .product_image {
     transform: scale(1.08);
 }
 
@@ -453,11 +453,17 @@ footer {
     padding: 1rem 0rem;
     border-bottom: 5px solid var(--text-color);
     background: transparent;
+    display: block;
+    text-align: center;
 }
 
 .detail_button:hover {
     background-color: gainsboro;
 }
+
+/* .detail_button:active {
+    border-bottom: 2px solid var(--text-color);
+} */
 
 .size_label {
     padding: 0.3rem 1rem;

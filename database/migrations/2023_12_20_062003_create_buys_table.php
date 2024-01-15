@@ -15,6 +15,7 @@ class CreateBuysTable extends Migration
     {
         Schema::create('buys', function (Blueprint $table) {
             $table->id();
+            $table->string('user_id');
             $table->string('clothe_id');
             $table->string('size_id');
             $table->string('color_id');

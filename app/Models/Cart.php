@@ -10,6 +10,7 @@ class Cart extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'clothe_id',
         'size_id',
         'color_id',

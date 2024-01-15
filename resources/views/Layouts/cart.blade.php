@@ -106,8 +106,8 @@
                                 Rs.<span id="subtotal">{{ $total }}</span>.00
                             </h4>
                             <p>Taxes and shipping calculated at checkout</p>
-                            <button type="submit" class="detail_button" name="action" value="add_to_cart">Check
-                                out</button>
+                            <a href="{{ route('cart.checkout') }}" class="detail_button" name="action" value="add_to_cart">Check
+                                out</a>
                         </div>
                     </div>
                 @else

@@ -20,7 +20,6 @@
                     </div>
                     <form class="products_details_section" action="{{ route('user.check', $product->id) }}" method="get">
                         @csrf
-
                         <div class="product_title  py-3">
                             <h1 style="font-size: 3.5rem;font-weight: 300;">{{ $product->name }}</h1>
                             <div class="home_product_price my-2">
@@ -31,26 +30,51 @@
                             <div class="mt-4 mb-2">
                                 <fieldset class="size_counter">
                                     <legend>Size</legend>
-                                    @foreach ($product->size as $size)
+                                    @foreach ($product->size as $key => $size)
                                         @if ($size->size == 'S')
-                                            <input type="radio" class="size_radio_buttons" id="ageS" name="size"
-                                                value="{{ $size->id }}">
+                                            @if ($key === 0)
+                                                <input type="radio" class="size_radio_buttons" id="ageS"
+                                                    name="size" value="{{ $size->id }}" checked>
+                                            @else
+                                                <input type="radio" class="size_radio_buttons" id="ageS"
+                                                    name="size" value="{{ $size->id }}">
+                                            @endif
                                             <label for="ageS" class="size_label">Small</label>
                                         @elseif ($size->size == 'M')
-                                            <input type="radio" class="size_radio_buttons" id="ageM" name="size"
-                                                value="{{ $size->id }}">
+                                            @if ($key === 0)
+                                                <input type="radio" class="size_radio_buttons" id="ageM"
+                                                    name="size" value="{{ $size->id }}" checked>
+                                            @else
+                                                <input type="radio" class="size_radio_buttons" id="ageM"
+                                                    name="size" value="{{ $size->id }}">
+                                            @endif
                                             <label for="ageM" class="size_label">Medium</label>
                                         @elseif ($size->size == 'L')
-                                            <input type="radio" class="size_radio_buttons" id="ageL" name="size"
-                                                value="{{ $size->id }}">
+                                            @if ($key === 0)
+                                                <input type="radio" class="size_radio_buttons" id="ageL"
+                                                    name="size" value="{{ $size->id }}" checked>
+                                            @else
+                                                <input type="radio" class="size_radio_buttons" id="ageL"
+                                                    name="size" value="{{ $size->id }}">
+                                            @endif
                                             <label for="ageL" class="size_label">Large</label>
                                         @elseif ($size->size == 'XL')
-                                            <input type="radio" class="size_radio_buttons" id="ageXL" name="size"
-                                                value="{{ $size->id }}">
+                                            @if ($key === 0)
+                                                <input type="radio" class="size_radio_buttons" id="ageXL"
+                                                    name="size" value="{{ $size->id }}" checked>
+                                            @else
+                                                <input type="radio" class="size_radio_buttons" id="ageXL"
+                                                    name="size" value="{{ $size->id }}">
+                                            @endif
                                             <label for="ageXL" class="size_label">Extra Large</label>
                                         @elseif ($size->size == 'XXL')
-                                            <input type="radio" class="size_radio_buttons" id="ageXXL" name="size"
-                                                value="{{ $size->id }}">
+                                            @if ($key === 0)
+                                                <input type="radio" class="size_radio_buttons" id="ageXXL"
+                                                    name="size" value="{{ $size->id }}" checked>
+                                            @else
+                                                <input type="radio" class="size_radio_buttons" id="ageXXL"
+                                                    name="size" value="{{ $size->id }}">
+                                            @endif
                                             <label for="ageXXL" class="size_label">XXL</label>
                                         @endif
                                     @endforeach
@@ -60,9 +84,16 @@
                             <div class="mt-4 mb-2">
                                 <fieldset class="color_counter">
                                     <legend>Color</legend>
-                                    @foreach ($product->color as $color)
-                                        <input type="radio" class="color_radio_buttons" id="color_{{ $color->color }}"
-                                            name="color" value="{{ $color->id }}">
+                                    @foreach ($product->color as $key => $color)
+                                        @if ($key === 0)
+                                            <input type="radio" class="color_radio_buttons"
+                                                id="color_{{ $color->color }}" name="color" value="{{ $color->id }}"
+                                                checked>
+                                        @else
+                                            <input type="radio" class="color_radio_buttons"
+                                                id="color_{{ $color->color }}" name="color"
+                                                value="{{ $color->id }}">
+                                        @endif
                                         <label for="color_{{ $color->color }}"
                                             class="color_label">{{ $color->color }}</label>
                                     @endforeach
@@ -82,7 +113,8 @@
 
                             <div class="detail_section_buttons">
                                 <div class="detail_cart mt-5 mb-3">
-                                    <button type="submit" class="detail_button" name="action" value="add_to_cart">Add to
+                                    <button type="submit" class="detail_button" name="action" value="add_to_cart">Add
+                                        to
                                         cart</button>
                                 </div>
                                 <div class="detail_buy  my-3">
