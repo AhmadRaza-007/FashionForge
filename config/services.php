@@ -30,4 +30,16 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'google' => [
+        'client_id' => '308799378314-e0sn7hivc4ikaphguhq7npgnaie83f6i.apps.googleusercontent.com',
+        'client_secret' => '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',
+        'redirect' => 'http://127.0.0.1/google/callback',
+    ],
+    // 'google' => [
+    //     'client_id' => env('GOOGLE_DRIVE_CLIENT_ID'),
+    //     'client_secret' => env('GOOGLE_DRIVE_CLIENT_SECRET'),
+    //     'refresh_token' => env('GOOGLE_DRIVE_REFRESH_TOKEN'),
+    //     'folder_id' => env('GOOGLE_DRIVE_FOLDER_ID'),
+    // ],
+
 ];

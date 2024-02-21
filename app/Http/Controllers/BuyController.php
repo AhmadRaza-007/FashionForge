@@ -14,7 +14,10 @@ class BuyController extends Controller
      */
     public function index()
     {
-        //
+
+         $purchase = Buy::with('clothe', 'color', 'size')->where('user_id', auth()->user()->id)->get();
+
+        return view('Layouts.purchased', compact('purchase'));
     }
 
     /**

@@ -106,7 +106,8 @@
                                 Rs.<span id="subtotal">{{ $total }}</span>.00
                             </h4>
                             <p>Taxes and shipping calculated at checkout</p>
-                            <a href="{{ route('cart.checkout') }}" class="detail_button" name="action" value="add_to_cart">Check
+                            <a href="{{ route('cart.checkout') }}" class="detail_button" name="action"
+                                value="add_to_cart">Check
                                 out</a>
                         </div>
                     </div>
@@ -133,29 +134,34 @@
                     type: 'post',
                     data: $(`#createForm${id}`).serialize(),
                     success: function(response) {
-                        console.log(response);
+                        // console.log(response);
                         let arr = $(`.price`);
                         array = response.prices;
 
                         for (let index = 0; index < array.length; index++) {
                             // arr[index] = array[index];
+                            // console.log(arr);
+                            // console.log(array);
                             // console.log(arr[index]);
-                            arr[index].innerText = array[index].price * array[index].quantity;
+                            // console.log(`index${index}:`, arr[index]);
+                            // console.log(array[index].quantity);
+                            arr[index].innerText = ' ' + array[index].price * array[index].quantity;
                             // console.log(array[index]);
 
                         }
-
+                        console.log();
                         // arr.each((index, element) => {
-                        // console.log(index, element);
-                        // console.log(element.prices.id);
-                        // array.forEach(elem => {
-                        // console.log(element)
-                        // element.innerText = element.prices
-                        // console.log(element);
-                        // });
+                        //     console.log(index, element);
+                        //     console.log(element.prices.id);
+                        //     array.forEach(elem => {
+                        //         console.log(element)
+                        //         element.innerText = element.prices
+                        //         console.log(element);
+                        //     });
                         // })
                         // console.log(response.cart.id)
                         // $(`#price`).text(response.cart.price * response.cart.quantity)
+                        console.log(response);
                         $('#subtotal').text(response.total);
                     }
                 })

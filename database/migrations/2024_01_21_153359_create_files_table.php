@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBuysTable extends Migration
+class CreateFilesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,8 @@ class CreateBuysTable extends Migration
      */
     public function up()
     {
-        Schema::create('buys', function (Blueprint $table) {
+        Schema::create('files', function (Blueprint $table) {
             $table->id();
-            $table->string('user_id');
-            $table->string('clothe_id');
-            $table->string('size_id');
-            $table->string('color_id');
-            $table->string('quantity');
-            $table->string('price');
-            $table->string('total_price');
             $table->timestamps();
         });
     }
@@ -33,6 +26,6 @@ class CreateBuysTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('buys');
+        Schema::dropIfExists('files');
     }
 }

@@ -1,9 +1,12 @@
 <?php
 
+use App\Http\Controllers\BuyController;
 use App\Http\Controllers\ClotheController;
 use App\Http\Controllers\CollectionController;
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\Frontend\FrontendController;
 use App\Http\Controllers\Frontend\SectionController;
+use App\Http\Controllers\GoogleDriveController;
 use App\Http\Controllers\SubCollectionController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -42,7 +45,7 @@ Route::get('/cart', [FrontendController::class, 'cart'])->name('user.cart');
 Route::post('/cartIncrement/{id}', [FrontendController::class, 'cartIncrement'])->name('user.cartIncrement');
 Route::get('/cartDelete/{id}', [FrontendController::class, 'cartDelete'])->name('user.cartDelete');
 // Route::post('/postBuy/{id}', [FrontendController::class, 'postCart'])->name('user.postBuy');
-Route::get('/buyNow', [FrontendController::class, 'cart'])->name('user.buyNow');
+Route::get('/purchased', [BuyController::class, 'index'])->name('user.purchased');
 
 //////////////////////////////  Admin Login Routes  //////////////////////////////////
 Route::prefix('admin')->group(function () {
@@ -89,3 +92,20 @@ Route::group(['middleware' => 'auth', 'middleware' => 'AdminCheck'], function ()
 
 Route::get('checkout', [FrontendController::class, 'Checkout'])->name('cart.checkout');
 // Route::get('factorial/{num}', [FrontendController::class, 'factorial'])->name('slug');
+
+
+Route::get('drive', function () {
+    return view('admin.googledrive');
+});
+
+
+Route::get('getfile', [FileController::class, 'index']);
+Route::post('file', [FileController::class, 'store']);
+
+
+
+// Route::get('google/login',[GoogleDriveController::class,'googleLogin'])->name('google.login');
+// Route::get('google-drive/file-upload',[GoogleDriveController::class,'googleDriveFilePpload'])->name('google.drive.file.upload');
+
+Route::get('google/login', [GoogleDriveController::class, 'provider'])->name('google.login');
+Route::get('google/callback', [GoogleDriveController::class, 'callbackHandle'])->name('google.callback');

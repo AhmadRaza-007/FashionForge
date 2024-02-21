@@ -6,11 +6,16 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
+        "flatroy/nova-progressbar-field": "*",
         "fruitcake/laravel-cors": "^2.0",
+        "google/apiclient": "^2.15.0",
         "guzzlehttp/guzzle": "^7.0.1",
+        "haythem/progress-bar": "*",
         "laravel/framework": "^8.75",
         "laravel/sanctum": "^2.11",
+        "laravel/socialite": "^5.11",
         "laravel/tinker": "^2.5",
+        "nao-pon/flysystem-google-drive": "~1.1",
         "php-flasher/flasher-toastr-laravel": "^1.15"
     },
     "require-dev": {

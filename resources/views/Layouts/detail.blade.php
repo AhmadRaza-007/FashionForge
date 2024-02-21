@@ -39,7 +39,7 @@
                                                 <input type="radio" class="size_radio_buttons" id="ageS"
                                                     name="size" value="{{ $size->id }}">
                                             @endif
-                                            <label for="ageS" class="size_label">Small</label>
+                                            <label for="ageS" class="size_label">{{ $size->size }}</label>
                                         @elseif ($size->size == 'M')
                                             @if ($key === 0)
                                                 <input type="radio" class="size_radio_buttons" id="ageM"
@@ -48,7 +48,7 @@
                                                 <input type="radio" class="size_radio_buttons" id="ageM"
                                                     name="size" value="{{ $size->id }}">
                                             @endif
-                                            <label for="ageM" class="size_label">Medium</label>
+                                            <label for="ageM" class="size_label">{{ $size->size }}</label>
                                         @elseif ($size->size == 'L')
                                             @if ($key === 0)
                                                 <input type="radio" class="size_radio_buttons" id="ageL"
@@ -57,7 +57,7 @@
                                                 <input type="radio" class="size_radio_buttons" id="ageL"
                                                     name="size" value="{{ $size->id }}">
                                             @endif
-                                            <label for="ageL" class="size_label">Large</label>
+                                            <label for="ageL" class="size_label">{{ $size->size }}</label>
                                         @elseif ($size->size == 'XL')
                                             @if ($key === 0)
                                                 <input type="radio" class="size_radio_buttons" id="ageXL"
@@ -66,7 +66,7 @@
                                                 <input type="radio" class="size_radio_buttons" id="ageXL"
                                                     name="size" value="{{ $size->id }}">
                                             @endif
-                                            <label for="ageXL" class="size_label">Extra Large</label>
+                                            <label for="ageXL" class="size_label">{{ $size->size }}</label>
                                         @elseif ($size->size == 'XXL')
                                             @if ($key === 0)
                                                 <input type="radio" class="size_radio_buttons" id="ageXXL"
@@ -75,7 +75,7 @@
                                                 <input type="radio" class="size_radio_buttons" id="ageXXL"
                                                     name="size" value="{{ $size->id }}">
                                             @endif
-                                            <label for="ageXXL" class="size_label">XXL</label>
+                                            <label for="ageXXL" class="size_label">{{ $size->size }}</label>
                                         @endif
                                     @endforeach
                                 </fieldset>

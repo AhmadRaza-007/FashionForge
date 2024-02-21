@@ -644,10 +644,11 @@
                                     </div>
                                     <span class="text-muted">Rs.{{ $product->price }}</span>
                                 </li>
-                                <input type="text" name="{{ 'product' . $key }}" value="{{ $product->clothe->id }}">
-                                <input type="text" name="{{ 'color' . $key }}" value="{{ $product->color->id }}">
-                                <input type="text" name="{{ 'size' . $key }}" value="{{ $product->size->id }}">
-                                <input type="text" name="{{ 'quantity' . $key }}" value="{{ $product->quantity }}">
+                                <input type="hidden" name="{{ 'product[]' }}" value="{{ $product->clothe->id }}">
+                                <input type="hidden" name="{{ 'color[]' }}" value="{{ $product->color->id }}">
+                                <input type="hidden" name="{{ 'size[]' }}" value="{{ $product->size->id }}">
+                                <input type="hidden" name="{{ 'quantity[]' }}" value="{{ $product->quantity }}">
+                                <input type="hidden" name="{{ 'price[]' }}" value="{{ $product->price }}">
                             @endforeach
                         </ul>
                     @endif
@@ -699,7 +700,7 @@
     @endguest
 
     <footer @if (!auth()->check()) style='position:absolute; bottom:0;width:100%' @endif>
-        &copy; 2024 FashionForge. All rights reserved.
+        &copy; {{ date('Y') }} FashionForge. All rights reserved.
     </footer>
 </body>
 

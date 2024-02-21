@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Models\Clothe;
 use App\http\Controllers\Controller;
 use App\Models\Address;
+use App\Models\Buy;
 use App\Models\Cart;
 use App\Models\SubCollection;
 use Illuminate\Http\Request;
@@ -50,38 +51,47 @@ class FrontendController extends Controller
 
     public function postCart($request, $id)
     {
-        Cart::create([
-            'user_id' => Auth::user()->id,
-            'clothe_id' => $id,
-            'size_id' => $request->size,
-            'color_id' => $request->color,
-            'quantity' => $request->quantity,
-            'price' => $request->hidden_price,
-        ]);
+        if (auth()->check()) {
 
-        toastr()->addSuccess('Product Added to Cart Successfully');
-        return redirect()->back();
+            Cart::create([
+                'user_id' => Auth::user()->id,
+                'clothe_id' => $id,
+                'size_id' => $request->size,
+                'color_id' => $request->color,
+                'quantity' => $request->quantity,
+                'price' => $request->hidden_price,
+            ]);
+
+            toastr()->addSuccess('Product Added to Cart Successfully');
+            return redirect()->back();
+        } else {
+            return redirect()->route('user.login');
+        }
     }
 
     public function cartIncrement(Request $request, $id)
     {
-        $cartItem = Cart::find($id);
-        $cartItem->update(['quantity' => $request['editQuantity_' . $id]]);
-        $cartPriceTotal = Cart::get();
-        $total = null;
-        $prices = Cart::get();
-        foreach ($cartPriceTotal as $key => $price) {
-            $total += $price->price * $price->quantity;
-            // print_r(
-            //     $price->price * $price->quantity . '<br>'
-            // );
-        }
+        if (auth()->check()) {
+            $cartItem = Cart::find($id);
+            $cartItem->update(['quantity' => $request['editQuantity_' . $id]]);
+            $cartPriceTotal = Cart::where('user_id', auth()->user()->id)->get();
+            $total = null;
+            $prices = Cart::where('user_id', auth()->user()->id)->get(['price', 'quantity']);
+            foreach ($cartPriceTotal as $key => $price) {
+                $total += $price->price * $price->quantity;
+                // print_r(
+                //     $price->price * $price->quantity . '<br>'
+                // );
+            }
 
-        return response()->json([
-            'cart' => $cartItem,
-            'total' => $total,
-            'prices' => $prices,
-        ]);
+            return response()->json([
+                'cart' => $cartItem,
+                'total' => $total,
+                'prices' => $prices,
+            ]);
+        }else{
+            return redirect()->route('user.login');
+        }
     }
 
     public function cartDelete($id)
@@ -153,7 +163,6 @@ class FrontendController extends Controller
 
         $is_exist = Address::where('user_id', Auth::user()->id)->first();
         $is_exist = isset($is_exist) ? 1 : 0;
-        // return $request->all();
         if ($request->save_information) {
             if (!$is_exist) {
                 $address = Address::create([
@@ -173,7 +182,33 @@ class FrontendController extends Controller
                 ]);
             }
         }
-        return $request->all();
+
+        $cart_items = Cart::where('user_id', auth()->user()->id)->get();
+
+        $array = [$request->all()];
+        $total_price = 0;
+        foreach ($array as $key => $value) {
+
+            for ($i = 0; $i < count($value['product']); $i++) {
+                $total_price += $value['price'][$i] * $value['quantity'][$i];
+            }
+
+            for ($i = 0; $i < count($value['product']); $i++) {
+                Buy::create([
+                    'user_id' => auth()->user()->id,
+                    'clothe_id' => $value['product'][$i],
+                    'size_id' => $value['size'][$i],
+                    'color_id' => $value['color'][$i],
+                    'quantity' => $value['quantity'][$i],
+                    'price' => $value['price'][$i] * $value['quantity'][$i],
+                    'total_price' => $total_price,
+                ]);
+
+                $cart_items[$i]->delete();
+            }
+        }
+
+        return redirect()->route('user.purchased');
     }
 
     /**
