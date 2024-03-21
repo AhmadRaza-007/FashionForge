@@ -7,6 +7,9 @@ use App\http\Controllers\Controller;
 use App\Models\Address;
 use App\Models\Buy;
 use App\Models\Cart;
+use App\Models\Collection;
+use App\Models\Gift;
+use App\Models\Order;
 use App\Models\SubCollection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -31,7 +34,8 @@ class FrontendController extends Controller
     {
         $products = Clothe::with('productImages', 'subCollection')->where('id', $id)->get();
         // return $products;
-        return view('Layouts.detail', compact('products'));
+        $isGift = false;
+        return view('Layouts.detail', compact('products', 'isGift'));
     }
 
     public function cart()
@@ -89,7 +93,7 @@ class FrontendController extends Controller
                 'total' => $total,
                 'prices' => $prices,
             ]);
-        }else{
+        } else {
             return redirect()->route('user.login');
         }
     }
@@ -122,15 +126,22 @@ class FrontendController extends Controller
 
     public function checkout2($request, $id)
     {
-        $products = Clothe::whereId($id)->with('color', 'size', 'productImages')->get();
-        $address = null;
-        return view('Layouts.checkout', compact('request', 'products', 'address'));
+        $isGift = $request->isGift;
+        if (!$request->isGift) {
+            $products = Clothe::whereId($id)->with('color', 'size', 'productImages')->get();
+        }
+        if ($request->isGift) {
+            $products = Gift::whereId($id)->get();
+        }
+        $address = Address::where('user_id', auth()->user()->id)->first();
+        return view('Layouts.checkout', compact('request', 'products', 'address', 'isGift'));
     }
 
     public function check(Request $request, $id)
     {
         switch ($request->input('action')) {
             case 'buy_now':
+                // $request->all();
                 return $this->checkout2($request, $id);
                 break;
 
@@ -143,13 +154,12 @@ class FrontendController extends Controller
     public function category($id)
     {
         $products = Clothe::where('sub_collection_id', $id)->paginate(15);
-
         return view('Layouts.category', compact('products'));
     }
 
     public function completeOrder(Request $request)
     {
-
+        // return $request->all();
         $request->validate([
             'first_name' => 'required|min:2|max:15',
             'last_name' => 'required|min:2|max:15',
@@ -163,6 +173,7 @@ class FrontendController extends Controller
 
         $is_exist = Address::where('user_id', Auth::user()->id)->first();
         $is_exist = isset($is_exist) ? 1 : 0;
+
         if ($request->save_information) {
             if (!$is_exist) {
                 $address = Address::create([
@@ -187,14 +198,17 @@ class FrontendController extends Controller
 
         $array = [$request->all()];
         $total_price = 0;
+        // return $array;
         foreach ($array as $key => $value) {
 
             for ($i = 0; $i < count($value['product']); $i++) {
+                // return count($value['product']);
                 $total_price += $value['price'][$i] * $value['quantity'][$i];
             }
+            // return $total_price;
 
             for ($i = 0; $i < count($value['product']); $i++) {
-                Buy::create([
+                Order::create([
                     'user_id' => auth()->user()->id,
                     'clothe_id' => $value['product'][$i],
                     'size_id' => $value['size'][$i],
@@ -202,76 +216,63 @@ class FrontendController extends Controller
                     'quantity' => $value['quantity'][$i],
                     'price' => $value['price'][$i] * $value['quantity'][$i],
                     'total_price' => $total_price,
+                    'order_date' => date('Y-m-d H:i:s'),
+                    'order_status' => 'Pending',
                 ]);
-
-                $cart_items[$i]->delete();
+                if (isset($cart_items[$i])) {
+                    $cart_items[$i]->delete();
+                }
             }
         }
 
+        toastr()->addSuccess('Order Placed Successfully');
         return redirect()->route('user.purchased');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function address()
+    {
+        $address = Address::where('user_id', auth()->user()->id)->first();
+        return view('Layouts.userDetails', compact('address'));
+    }
+
+    public function gifts(Request $request)
+    {
+        $gifts = Gift::get();
+        return view('Layouts.gift', compact('gifts'));
+    }
+
+    public function gift($id, Request $request)
+    {
+        $gifts = Gift::whereId($id)->get();
+        $isGift = true;
+        return view('Layouts.detail', compact('gifts', 'isGift'));
+    }
+
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         //
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         //

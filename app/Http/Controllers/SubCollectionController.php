@@ -25,12 +25,15 @@ class SubCollectionController extends Controller
 
     public function collection($id)
     {
-        
+
         $collection = Collection::get();
         $subCollection = SubCollection::with('collection')->whereCollectionId($id)->get();
         $subName = $subCollection->first();
         // return $subName;
-        return view('admin.subCollection', compact('collection', 'subCollection', 'subName'));
+        $cookie = cookie('active', 'subCollection', 60 * 24 * 30);
+        return response()
+            ->view('admin.subCollection', compact('collection', 'subCollection', 'subName'))
+            ->withCookie($cookie);
     }
 
     public function editSubCollection($id)

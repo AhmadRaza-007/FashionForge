@@ -19,6 +19,10 @@ class Buy extends Model
         'total_price',
     ];
 
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+
     public function clothe()
     {
         return $this->belongsTo(Clothe::class)->with('productImages');

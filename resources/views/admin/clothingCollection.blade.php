@@ -62,7 +62,7 @@
                     <h5 class="modal-title" id="exampleModalLabel">Add Cloth Collection</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form method="post" action="{{ route('admin.editCollection') }}">
+                <form method="post" action="{{ route('admin.updateCollection') }}">
                     @csrf
                     <div class="modal-body">
                         <input type="hidden" name="collection_id_edit" class="form-control" id="collection_id_edit" placeholder="Enter Collection" required>

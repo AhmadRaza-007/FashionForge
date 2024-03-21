@@ -20,46 +20,14 @@
                     ?>
                     <ul class="menu-items">
                         @foreach ($links as $link)
-                            <a href="{{ url('/womenSection' . '/' . $link->id) }}"
+                            <a href="{{ url('/products' . '/' . $link->id) }}"
                                 class="d-flex justify-content-between align-items-center">
                                 <li>{{ $link->name }}</li>
                             </a>
                         @endforeach
-                        <!-- <a href="#home" class="d-flex justify-content-between align-items-center">
-                            <li>Women</li>
-                            <i class="fa-solid fa-arrow-right-long"></i>
-                        </a>
-                        <a href="#home" class="d-flex justify-content-between align-items-center">
-                            <li>Kids</li>
-                            <i class="fa-solid fa-arrow-right-long"></i>
-                        </a>
-                        <a href="#home" class="d-flex justify-content-between align-items-center">
-                            <li>Men's Collection</li>
-                            <i class="fa-solid fa-arrow-right-long"></i>
-                        </a>
-                        <a href="#about" class="d-flex justify-content-between align-items-center">
-                            <li>Winter Collection</li>
-                        </a>
-                        <a href="#about" class="d-flex justify-content-between align-items-center">
-                            <li>Kids's Winter Collection</li>
-                        </a>
-                        <a href="#about" class="d-flex justify-content-between align-items-center">
-                            <li>Contact Us</li>
-                        </a> -->
                     </ul>
                 </div>
             </nav>
-            <!-- <div class="for_sporting" style="visibility: hidden;">
-                <div class="search search2 mx-3" style="display: none;">
-                    <span class="material-symbols-outlined" style="color: white;">search</span>
-                </div>
-                <div class="cart mx-3">
-                    <span class="material-symbols-outlined" style="color: white;">local_mall</span>
-                </div>
-            </div> -->
-            <!-- <div class="search" id="search">
-                <span class="material-symbols-outlined" style="color: white;">search</span>
-            </div> -->
             <div class="logo">
                 <a href="#" class="d-flex">
                     <img src="{{ asset('assets/webResources/Belle_Chic_Logo_PNG.png') }}" class="m-auto" alt="Logo">
@@ -72,32 +40,29 @@
                             Home
                         </a>
                     </li>
-                    @foreach ($links as $link)
+                    @foreach ($links as $key => $link)
                         <li>
-                            <a href="{{ url('/womenSection' . '/' . $link->id) }}"
+                            <a href="{{ url('/products' . '/' . $link->id) }}"
                                 class="d-flex justify-content-between align-items-center">
-                                {{ $link->name ?? 'Null' }}
+                                {{ $link->name ?? 'Null' }} &nbsp;
+                                @if (count($link->subCollection) > 0)
+                                    <i class="fa fa-caret-down"></i>
+                                @endif
                             </a>
+                            @if (count($link->subCollection) > 0)
+                                <ul class="submenu d-block position-absolute bg-light">
+                                    @foreach ($link->subCollection as $subCollection)
+                                        <a href="{{ url('products/category/' . $subCollection->id) }}"
+                                            style="display: inline-block;width: 100%;padding: .5rem 0.3rem;text-decoration:none;">
+                                            <li class="text-dark m-0">
+                                                {{ $subCollection->title }}
+                                            </li>
+                                        </a>
+                                    @endforeach
+                                </ul>
+                            @endif
                         </li>
                     @endforeach
-                    <!-- <a href="#home" class="d-flex justify-content-between align-items-center">
-                        <li>Women</li>
-                    </a>
-                    <a href="#home" class="d-flex justify-content-between align-items-center">
-                        <li>Kids</li>
-                    </a>
-                    <a href="#home" class="d-flex justify-content-between align-items-center">
-                        <li>Men's Collection</li>
-                    </a>
-                    <a href="#about" class="d-flex justify-content-between align-items-center">
-                        <li>Winter Collection</li>
-                    </a>
-                    <a href="#about" class="d-flex justify-content-between align-items-center">
-                        <li>Kids's Winter Collection</li>
-                    </a>
-                    <a href="#about" class="d-flex justify-content-between align-items-center">
-                        <li>Contact Us</li>
-                    </a> -->
                 </ul>
             </nav>
             <?php
@@ -106,7 +71,7 @@
                 $cart_count = App\Models\Cart::where('user_id', auth()->user()->id)->count();
             }
             ?>
-            <div class="d-flex">
+            <div class="d-flex" style="height: 3rem;">
                 <div class="search mx-3 d-flex">
                     <a class="material-symbols-outlined m-auto" id="search" style="text-decoration:none;">
                         <img srcset="https://img.icons8.com/?size=50&amp;id=132&amp;format=png 1x, https://img.icons8.com/?size=100&amp;id=132&amp;format=png 2x,"
@@ -127,6 +92,11 @@
                                 d="M20.5 6.5a4.75 4.75 0 00-4.75 4.75v.56h-3.16l-.77 11.6a5 5 0 004.99 5.34h7.38a5 5 0 004.99-5.33l-.77-11.6h-3.16v-.57A4.75 4.75 0 0020.5 6.5zm3.75 5.31v-.56a3.75 3.75 0 10-7.5 0v.56h7.5zm-7.5 1h7.5v.56a3.75 3.75 0 11-7.5 0v-.56zm-1 0v.56a4.75 4.75 0 109.5 0v-.56h2.22l.71 10.67a4 4 0 01-3.99 4.27h-7.38a4 4 0 01-4-4.27l.72-10.67h2.22z">
                             </path>
                         </svg>
+                    </a>
+                </div>
+                <div class="cart mx-3 d-flex justify-content-center align-items-center">
+                    <a href="{{ route('user.profile') }}" style="font-size: 1.5rem">
+                        <i class="fa fa-user"></i>
                     </a>
                 </div>
             </div>

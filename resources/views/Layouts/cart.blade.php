@@ -76,7 +76,7 @@
                                             </div>
                                         </form>
                                     </td>
-                                    <td style="font-size: 1.2rem;font-weight:600;">
+                                    <td style="font-size: 1.2rem;font-weight:600;width: 12rem;">
                                         Rs.<span id="price" class="price" style="font-size: 1.2rem;font-weight:600;">
                                             {{ $product->quantity * $product->price }}</span>.00
                                         {{-- <span id="price" style="font-size: 1.2rem;font-weight:600;"></span> --}}

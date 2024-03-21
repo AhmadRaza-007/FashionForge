@@ -25,7 +25,7 @@
                 @foreach ($subCollection as $product)
                     <div class="subCollection">
                         <a href="{{ route('user.category', $product->id) }}" class="text-decoration-none">
-                            <div class="product_card" style="height: 30rem;">
+                            <div class="product_card">
                                 <img src="{{ asset($product->image) }}" class="product_image" alt="">
                             </div>
                             <div class="home_product_contant">

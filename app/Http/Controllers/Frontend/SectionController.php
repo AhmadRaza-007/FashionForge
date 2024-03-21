@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\http\Controllers\Controller;
 use App\Models\Clothe;
 use App\Models\Collection;
+use App\Models\SubCollection;
 
 class SectionController extends Controller
 {
@@ -23,9 +24,18 @@ class SectionController extends Controller
 
     public function womenSection($id)
     {
-        $products = Clothe::with('productImages', 'subCollection')->where('sub_collection_id', $id)->get();
-        // return $products;
+        $products = Clothe::with('productImages', 'subCollection')->whereHas('subCollection', function ($q) use ($id) {
+            $q->where('collection_id', $id);
+        })->get();
+
         return view('Layouts.section', compact('products'));
+    }
+
+    public function productsByCategory($id)
+    {
+        $products = Clothe::with('productImages', 'subCollection')->where('sub_collection_id', $id)->get();
+        return view('Layouts.section', compact('products'));
+        return 'working: ' . $id;
     }
     /**
      * Show the form for creating a new resource.

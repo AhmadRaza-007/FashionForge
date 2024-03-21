@@ -21,9 +21,9 @@ class AdminCheck
             if (auth()->user()->user_type == 1) {
                 return $next($request);
             }
-        }else{
+        } else {
             return redirect()->route('admin.login');
         }
-        return abort(403, '403 - Forbidden');
+        // return abort(403, '403 - Forbidden');
     }
 }

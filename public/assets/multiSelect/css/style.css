@@ -11791,6 +11791,7 @@ h5,
 .select2-results__option {
   padding-right: 20px;
   vertical-align: middle;
+  color: white;
 }
 
 .select2-results__option:before {

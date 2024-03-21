@@ -7,6 +7,7 @@ use App\Models\SubCollection;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\Console\Input\Input;
 
@@ -30,8 +31,11 @@ class UserController extends Controller
 
     public function dashboard()
     {
-        return view('admin.main');
+        $cookie = cookie('active', 'dashboard', 60 * 24 * 30);
+        // Return the view with the cookie attached to the response
+        return response()->view('admin.main')->withCookie($cookie);
     }
+
 
     public function frontLogin()
     {
@@ -53,7 +57,7 @@ class UserController extends Controller
         $credentials = array_merge($data, ['user_type' => 2]);
         if (Auth::attempt($credentials)) {
             toastr()->addSuccess('Login Successfully');
-            return redirect()->route('user.homeSection');
+            return redirect()->intended();
         }
         toastr()->closeButton(true)->closeHtml('⛑')->addError('Something Went Wrong');
         return redirect()->back()->withInput();
@@ -61,24 +65,22 @@ class UserController extends Controller
 
     public function postFrontSignup(Request $request)
     {
-        $data = $request->validate([
+        $request->validate([
             'first_name' => 'required',
             'second_name' => 'required',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6|confirmed',
         ]);
 
-        if ($data) {
-            User::create([
-                'first_name' => $request->first_name,
+
+        User::create([
+            'first_name' => $request->first_name,
             'second_name' => $request->second_name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            ]);
+        ]);
 
-            return redirect()->route('user.login');
-        }
-        return redirect()->back()->withInput();
+        return redirect()->route('user.login');
     }
 
     public function login()
@@ -119,6 +121,27 @@ class UserController extends Controller
         $request->session()->invalidate();
         Auth::logout();
         return redirect('admin/login');
+    }
+
+    public function setTheme(Request $request)
+    {
+        if ($request->theme === 'on') {
+            $cookie = cookie('theme', 'light', 60 * 24 * 30);
+        } else {
+            $cookie = cookie('theme', 'dark', 60 * 24 * 30);
+        }
+        return redirect()->back()->withCookie($cookie);
+    }
+
+    public function userProfile()
+    {
+        return view('Layouts.profile');
+    }
+
+    public function users()
+    {
+        $users = User::all();
+        return view('admin.users', compact('users'));
     }
 
     /**

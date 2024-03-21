@@ -16,15 +16,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Your bootstrapping code here
-
-        // $slug = $this->getSlugFromRequest();
-
-        // // Now you have the slug and can use it as needed
-        // // For example, you can bind it to the service container
-        // $this->app->bind('current_slug', function () use ($slug) {
-        //     return $slug;
-        // });
         Paginator::useBootstrap();
     }
 

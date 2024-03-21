@@ -10,6 +10,7 @@
     /* Media */
     --clr-facebook: hsl(208, 92%, 53%);
     --clr-twitter: hsl(203, 89%, 53%);
+    --clr-success: rgb(29, 180, 37);
     --clr-instagram: linear-gradient(to right, hsl(37, 97%, 70%), hsl(329, 70%, 58%));
     --clr-youtube: hsl(348, 97%, 39%);
 
@@ -133,11 +134,12 @@ nav {
 
 .dashboard-nav {
     /* background-color: #443ea2; */
-    background-color: hsl(228, 28%, 20%);
+    /* background-color: hsl(228, 28%, 20%); */
+    background-color: var(--clr-theme-card-bg);
 }
 
 .dashboard-nav a {
-    color: #fff !important;
+    color: var(--clr-instagram) !important;
 }
 
 .brand-logo {
@@ -257,7 +259,7 @@ nav {
 }
 
 .dashboard-nav .dashboard-nav-dropdown-toggle:after {
-    border-top-color: rgba(255, 255, 255, 0.72) !important;
+    border-top-color: var(--clr-instagram) !important;
 }
 
 .dashboard-nav-dropdown-menu {
@@ -347,7 +349,7 @@ nav {
 
 @media (min-width: 992px) {
     .dashboard-app {
-        margin-left: 238px;
+        margin-left: 260px;
     }
 
     .dashboard-compact .dashboard-app {

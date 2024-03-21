@@ -24,7 +24,7 @@ class User extends Authenticatable
         'user_type',
         'reset_code',
         'password',
-        'access_token' // ADD TOKEN PROPERTY HERE
+        'access_token'
     ];
 
     /**

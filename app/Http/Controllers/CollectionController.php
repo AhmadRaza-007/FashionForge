@@ -19,8 +19,9 @@ class CollectionController extends Controller
         $collection = Collection::with('subCollection')->get();
         // return $collection;
         // return Collection::with('subCollection')->get();
+        $cookie = cookie('active', 'clothingCollection', 60 * 24 * 30);
 
-        return view('admin.clothingCollection', compact('collection'));
+        return response()->view('admin.clothingCollection', compact('collection'));
     }
 
     public function sidebar()

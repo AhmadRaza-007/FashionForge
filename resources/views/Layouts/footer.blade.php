@@ -29,6 +29,6 @@
         </div>
     </div>
     <div class="footer_copyright mt-5">
-        <span>Copyright © Your Website 2022</span>
+        <span>Copyright © Your Website {{ date('Y') }}</span>
     </div>
 </footer>

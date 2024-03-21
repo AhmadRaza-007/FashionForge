@@ -31,8 +31,9 @@ class ClotheController extends Controller
         $productCount = Clothe::count();
 
         // return $products;
+        $cookie = cookie('active', 'clothe', 60 * 24 * 30);
+        return response()->view('admin.clothes', compact('subCollection', 'products', 'product_images', 'subCollectionById', 'productCount', 'colors', 'sizes'))->withCookie($cookie);
 
-        return view('admin.clothes', compact('subCollection', 'products', 'product_images', 'subCollectionById', 'productCount', 'colors', 'sizes'));
     }
 
     public function productById($id)
@@ -44,7 +45,8 @@ class ClotheController extends Controller
         $colors = Color::get();
         $sizes = Size::get();
         // return $subCollection;
-        return view('admin.clothes', compact('subCollection', 'products', 'subCollectionById', 'productCount', 'colors', 'sizes'));
+        $cookie = cookie('active', 'clothe', 60 * 24 * 30);
+        return response()->view('admin.clothes', compact('subCollection', 'products', 'subCollectionById', 'productCount', 'colors', 'sizes'))->withCookie($cookie);
     }
 
     /**

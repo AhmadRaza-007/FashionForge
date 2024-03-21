@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Buy;
+use Illuminate\Contracts\View\View as View;
 use Illuminate\Http\Request;
 
 class BuyController extends Controller
@@ -15,9 +16,14 @@ class BuyController extends Controller
     public function index()
     {
 
-         $purchase = Buy::with('clothe', 'color', 'size')->where('user_id', auth()->user()->id)->get();
+        $purchase = Buy::with('clothe', 'color', 'size')->where('user_id', auth()->user()->id)->get();
 
         return view('Layouts.purchased', compact('purchase'));
+    }
+
+    public function orders(){
+        $purchase = Buy::with('clothe', 'color','size', 'user')->get();
+        return view('admin.orders', compact('purchase'));
     }
 
     /**
@@ -25,7 +31,7 @@ class BuyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(): void
     {
         //
     }

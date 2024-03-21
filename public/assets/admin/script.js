@@ -21,15 +21,25 @@ $(document).ready(function () {
 
 
 // Select Body
-const bodyEle = document.body;
+// const bodyEle = document.body;
 
-// Select Switch Toggle
-const switchToggle = document.querySelector('.toggle-switch');
+// // Select Switch Toggle
+// const switchToggle = document.querySelector('#toggle-switch');
 
-// When (switchToggle) has (click) Event
-switchToggle.addEventListener('click', function () {
-    // Toggle Class (body_theme_light) On (bodyEle)
-    bodyEle.classList.toggle('body_theme_light');
-});
+// // When (switchToggle) has (click) Event
+// switchToggle.addEventListener('click', function () {
+//     console.log('clicked');
+//     bodyEle.classList.toggle('body_theme_light'); // Use toggle instead of add
+// });
+
+toggleTheme()
+function toggleTheme() {
+    const is_true = document.getElementById('switchCeckbox');
+    if (is_true.checked) {
+        document.body.classList.add('body_theme_light'); // Use toggle instead of add
+    } else {
+        document.body.classList.remove('body_theme_light');
+    }
+}
 
 // :)
