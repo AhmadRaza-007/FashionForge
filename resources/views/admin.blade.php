@@ -3,7 +3,7 @@
 
 <head>
     <style>
-        a{
+        a {
             color: inherit !important;
         }
     </style>
@@ -55,6 +55,9 @@
     <!-- MultiSelect CSS File  -->
     <link rel="stylesheet" href="{{ asset('assets/multiSelect/css/style.css') }}">
 
+    <!-- MultiSelect CSS File  -->
+    {{-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> --}}
+
 
 
     <title>Document</title>
@@ -68,7 +71,7 @@
         color: unset;
     }
 
-    pre{
+    pre {
         color: unset
     }
 </style>
@@ -106,6 +109,21 @@
     <script src="{{ asset('dataTables/simple-datatables.js') }}" crossorigin="anonymous"></script>
     <script src="{{ asset('dataTables/datatables-simple-demo.js') }}"></script>
 
+    <!--    TinyMCE     -->
+    <script src="{{ asset('tinymce/tinymce.min.js') }}"></script>
+    <script>
+        function save() {
+            tinyMCE.triggerSave();
+        }
+        tinymce.init({
+            min_height: 200,
+            max_height: 500,
+            selector: '#tiny',
+            plugins: "advlist anchor autolink autoresize autosave charmap code codesample directionality emoticons fullscreen help image importcss insertdatetime link lists media nonbreaking pagebreak preview quickbars save searchreplace table visualblocks visualchars wordcount",
+            toolbar: 'undo redo | formatselect | bold italic underline strikethrough | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | code | insertdatetime link unlink image table hr | fullscreen searchreplace visualblocks visualchars code help',
+        });
+    </script>
+
     <script>
         const product_images = document.querySelector('#product_images');
         let modalForCount = document.getElementById('modalForCount');
@@ -139,16 +157,29 @@
             }
             if (image_section.children.length <= 4 || count === 5) {
                 ++count
-                image_section.innerHTML += `<div class="plusButton" id="image_section" style="display: grid;grid-template-columns: 48% 48%;align-items: center;justify-content: space-between;">
+                // image_section.innerHTML += `<div class="plusButton" id="image_section" style="display: grid;grid-template-columns: 48% 48%;align-items: center;justify-content: space-between;">
+            //                     <div class="mb-3" style="text-align: left;">
+            //                         <label for="product_images" class="form-label">Product Images</label>
+            //                         <input class="form-control" name="product_images[]" type="file" id="product_images" required>
+            //                     </div>
+            //                     <div class="mb-3 url_fields" style="text-align: left;" id="url_fields">
+            //                         <label for="product_image_url" class="form-label">Product Image URL</label>
+            //                         <input type="text" name="product_image_url[]" class="form-control" id="product_image_url" placeholder="Enter image url">
+            //                     </div>
+            //                 </div>`;
+                let tempContainer = document.createElement('div');
+                let html = `<div class="plusButton" id="image_section2" style="display: grid;grid-template-columns: 48% 48%;align-items: center;justify-content: space-between;">
                                     <div class="mb-3" style="text-align: left;">
-                                        <label for="product_images" class="form-label">Product Images</label>
-                                        <input class="form-control" name="product_images[]" type="file" id="product_images" required>
+                                        <label for="edit_product_images" class="form-label">Product Images</label>
+                                        <input class="form-control" name="edit_product_images[]" type="file" id="edit_product_images" required>
                                     </div>
                                     <div class="mb-3 url_fields" style="text-align: left;" id="url_fields">
-                                        <label for="product_image_url" class="form-label">Product Image URL</label>
-                                        <input type="text" name="product_image_url[]" class="form-control" id="product_image_url" placeholder="Enter image url">
+                                        <label for="edit_product_image_url" class="form-label">Product Image URL</label>
+                                        <input type="text" name="edit_product_image_url[]" class="form-control" id="edit_product_image_url" placeholder="Enter image url">
                                     </div>
                                 </div>`;
+                tempContainer.innerHTML = html;
+                image_section.appendChild(tempContainer);
             } else {
                 alert('limit crossing. Max Inputs Limit is 5')
             }
@@ -165,8 +196,6 @@
             }
         })
 
-
-
         const plusButton2 = document.querySelector('#plusButton2')
         const minusButton2 = document.querySelector('#minusButton2')
         const image_section2 = document.querySelector('#image_section2')
@@ -180,16 +209,31 @@
             }
             if (image_section2.children.length <= 4 || count === 5) {
                 ++count2;
-                image_section2.innerHTML += `<div class="plusButton" id="image_section2" style="display: grid;grid-template-columns: 48% 48%;align-items: center;justify-content: space-between;">
-                                    <div class="mb-3" style="text-align: left;">
-                                        <label for="edit_product_images" class="form-label">Product Images</label>
-                                        <input class="form-control" name="edit_product_images[]" type="file" id="edit_product_images" required>
-                                    </div>
-                                    <div class="mb-3 url_fields" style="text-align: left;" id="url_fields">
-                                        <label for="edit_product_image_url" class="form-label">Product Image URL</label>
-                                        <input type="text" name="edit_product_image_url[]" class="form-control" id="edit_product_image_url" placeholder="Enter image url">
-                                    </div>
-                                </div>`;
+                // image_section2.innerHTML += `<div class="plusButton" id="image_section2" style="display: grid;grid-template-columns: 48% 48%;align-items: center;justify-content: space-between;">
+            //                     <div class="mb-3" style="text-align: left;">
+            //                         <label for="edit_product_images" class="form-label">Product Images</label>
+            //                         <input class="form-control" name="edit_product_images[]" type="file" id="edit_product_images" required>
+            //                     </div>
+            //                     <div class="mb-3 url_fields" style="text-align: left;" id="url_fields">
+            //                         <label for="edit_product_image_url" class="form-label">Product Image URL</label>
+            //                         <input type="text" name="edit_product_image_url[]" class="form-control" id="edit_product_image_url" placeholder="Enter image url">
+            //                     </div>
+            //                 </div>`;
+
+                let tempContainer2 = document.createElement('div');
+                let html = `<div class="plusButton" id="image_section2" style="display: grid;grid-template-columns: 48% 48%;align-items: center;justify-content: space-between;">
+                        <div class="mb-3" style="text-align: left;">
+                            <label for="edit_product_images" class="form-label">Product Images</label>
+                            <input class="form-control" name="edit_product_images[]" type="file" id="edit_product_images" required>
+                        </div>
+                        <div class="mb-3 url_fields" style="text-align: left;" id="url_fields">
+                            <label for="edit_product_image_url" class="form-label">Product Image URL</label>
+                            <input type="text" name="edit_product_image_url[]" class="form-control" id="edit_product_image_url" placeholder="Enter image url">
+                        </div>
+                    </div>`;
+
+                tempContainer2.innerHTML = html;
+                image_section2.appendChild(tempContainer2);
             } else {
                 alert('limit crossing. Max Inputs Limit is 5')
             }
@@ -206,6 +250,9 @@
             }
         })
     </script>
+
+    <!-- MultiSelect JS -->
+    {{-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> --}}
 
     <!-- MultiSelect JS -->
     <script src="{{ asset('assets/multiSelect/js/jquery.min.js') }}"></script>

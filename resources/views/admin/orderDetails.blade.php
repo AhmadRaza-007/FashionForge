@@ -11,50 +11,44 @@
             <h1>User Details</h1>
             <div class="col-md-6">
                 <label for="firstName" class="form-label">First Name</label>
-                <input type="email" class="form-control" id="firstName"
-                name="FirstName" placeholder="First Name" required
+                <input type="email" class="form-control" id="firstName" name="FirstName" placeholder="First Name" required
                     value="{{ old('first_name', $purchase->user->first_name) }}" readonly>
             </div>
             <div class="col-md-6">
                 <label for="lastName" class="form-label">Last Name</label>
-                <input type="email" class="form-control" id="lastName"
-                name="Last Name" placeholder="Last Name" required
+                <input type="email" class="form-control" id="lastName" name="Last Name" placeholder="Last Name" required
                     value="{{ old('first_name', $purchase->user->second_name) }}" readonly>
             </div>
             <div class="col-md-6">
                 <label for="UserEmail" class="form-label">Email</label>
-                <input type="email" class="form-control" id="UserEmail"
-                name="UserEmail" placeholder="email" required
+                <input type="email" class="form-control" id="UserEmail" name="UserEmail" placeholder="email" required
                     value="{{ old('email', $purchase->user->email) }}" readonly>
             </div>
             <div class="col-md-6">
                 <label for="transactionType" class="form-label">Transaction Type</label>
-                <input type="email" class="form-control" id="transactionType"
-                name="TransactionType" placeholder=" Transaction Type" required
+                <input type="email" class="form-control" id="transactionType" name="TransactionType"
+                    placeholder=" Transaction Type" required
                     value="{{ old('transaction_type', $userAddress->transaction_type) }}" readonly>
             </div>
             <div class="col-12">
                 <label for="UserAddress" class="form-label">Address</label>
-                <input type="text" class="form-control" id="UserAddress" placeholder="1234 Main St"
-                name="Address" required
-                    value="{{ old('address', $userAddress->address) }}" readonly>
+                <input type="text" class="form-control" id="UserAddress" placeholder="1234 Main St" name="Address"
+                    required value="{{ old('address', $userAddress->address) }}" readonly>
             </div>
             <div class="col-12">
                 <label for="UserAddress2" class="form-label">Address 2</label>
-                <input type="text" class="form-control" id="UserAddress2" placeholder="Apartment, studio, or floor" name="UserAddress2"
-                    value="{{ old('address2', $userAddress->address_2) }}" readonly required>
+                <input type="text" class="form-control" id="UserAddress2" placeholder="Apartment, studio, or floor"
+                    name="UserAddress2" value="{{ old('address2', $userAddress->address_2) }}" readonly required>
             </div>
             <div class="col-md-6">
                 <label for="UserCity" class="form-label">City</label>
                 <input type="text" class="form-control" id="UserCity" name="UserCity" placeholder="City" required
-                 value="{{ old('address2', $userAddress->city) }}"
-                    readonly>
+                    value="{{ old('address2', $userAddress->city) }}" readonly>
             </div>
             <div class="col-md-4">
                 <label for="userMobile" class="form-label">User Mobile Number</label>
-                <input type="text" class="form-control" id="userMobile" name="userMobile" placeholder="Mobile Number" required
-                 value="{{ old('phone', $userAddress->phone) }}"
-                    readonly>
+                <input type="text" class="form-control" id="userMobile" name="userMobile" placeholder="Mobile Number"
+                    required value="{{ old('phone', $userAddress->phone) }}" readonly>
             </div>
             <div class="col-md-2">
                 <label for="zipCode" class="form-label">Zip</label>
@@ -68,18 +62,32 @@
             <h1 class="my-5">Ordered Product</h1>
             <div class="col-md-6" style="display: flex;
             flex-direction: column;">
-                <label for="productImages" class="form-label">Product Images</label>
-                <div class="d-flex">
-                    @foreach ($purchase->clothe->productImages as $productImages)
-                        <img class="me-1" src="{{ asset($productImages->product_images) }}" alt="product_image"
-                            width="100">
-                    @endforeach
+                <div>
+                    <label for="productImages" class="form-label">Product Images: </label>
+                    <div class="d-flex">
+                        @foreach ($purchase->clothe->productImages as $productImages)
+                            <img class="me-1" src="{{ asset($productImages->product_images) }}" alt="product_image"
+                                width="100">
+                        @endforeach
+                    </div>
                 </div>
+                @if ($purchase->gift)
+                    <div>
+                        <br>
+                        <label for="productImages" class="form-label">Gift: </label>
+                        <div class="d-flex">
+                            {{-- @foreach ($purchase->clothe->productImages as $productImages) --}}
+                            <img class="me-1" src="{{ asset($purchase->gift->image) }}" alt="product_image"
+                                width="100">
+                            {{-- @endforeach --}}
+                        </div>
+                    </div>
+                @endif
             </div>
             <div class="col-md-6">
                 <label for="productName" class="form-label">Product Name</label>
-                <input type="text" class="form-control" id="productName" name="productName" placeholder="Product Name" required
-                    value="{{ old('name', $purchase->clothe->name) }}" readonly>
+                <input type="text" class="form-control" id="productName" name="productName"
+                    placeholder="Product Name" required value="{{ old('name', $purchase->clothe->name) }}" readonly>
             </div>
             {{-- <div class="col-md-6">
                 <label for="inputEmail4" class="form-label">Product Category</label>
@@ -88,18 +96,18 @@
             </div> --}}
             <div class="col-md-6">
                 <label for="productQuantity" class="form-label">Product Quantity</label>
-                <input type="text" class="form-control" id="productQuantity" name="productQuantity" value="{{ old('quantity', $purchase->quantity) }}"
-                    readonly>
+                <input type="text" class="form-control" id="productQuantity" name="productQuantity"
+                    value="{{ old('quantity', $purchase->quantity) }}" readonly>
             </div>
             <div class="col-md-6">
                 <label for="productPrice" class="form-label">Product Unit Price</label>
-                <input type="text" class="form-control" id="productPrice" name="productPrice" placeholder="product unit price"
-                    value="{{ old('price', $purchase->clothe->price) }}" readonly>
+                <input type="text" class="form-control" id="productPrice" name="productPrice"
+                    placeholder="product unit price" value="{{ old('price', $purchase->clothe->price) }}" readonly>
             </div>
             <div class="col-md-6">
                 <label for="productTotalPrice" class="form-label">Total Price</label>
-                <input type="email" class="form-control" id="productTotalPrice" name="productTotalPrice" placeholder="Total Price"
-                    value="{{ old('total_price', $purchase->total_price) }}" readonly>
+                <input type="email" class="form-control" id="productTotalPrice" name="productTotalPrice"
+                    placeholder="Total Price" value="{{ old('total_price', $purchase->total_price) }}" readonly>
             </div>
             <div class="col-md-6">
                 <label for="productColor" class="form-label">Product Color</label>
@@ -113,7 +121,8 @@
             </div>
             <div class="col-md-12">
                 <label for="productLink" class="form-label">Product Link</label>
-                <input type="email" class="form-control" id="productLink" name="productLink" value="{{ url($link) }}" readonly>
+                <input type="email" class="form-control" id="productLink" name="productLink"
+                    value="{{ url($link) }}" readonly>
             </div>
         </div>
 
@@ -132,7 +141,7 @@
 
             <div class="button my-5 d-flex align-items-center">
                 <button type="submit" class="btn btn-primary me-3">Change Order Status</button>
-                <a href="" class="btn btn-danger">Cancel Order</a>
+                <a href="{{ route('order.delete', $purchase->id) }}" class="btn btn-danger">Cancel Order</a>
             </div>
         </form>
     </div>

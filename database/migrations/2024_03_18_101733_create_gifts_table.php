@@ -16,11 +16,10 @@ class CreateGiftsTable extends Migration
         Schema::create('gifts', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->text('details');
+            $table->text('product_detail');
             $table->string('price');
-            $table->string('image');
-            // $table->text('fabric_detail');
-            // $table->text('Measurements');
+            $table->text('fabric_detail');
+            $table->text('Measurements');
             $table->timestamps();
         });
     }

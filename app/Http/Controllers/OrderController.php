@@ -15,41 +15,57 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $purchase = Order::with('clothe', 'color', 'size')->where('user_id', auth()->user()->id)->get();
+        $purchase = Order::with('clothe', 'color', 'size')
+            ->where('user_id', auth()->user()->id)
+            ->get();
         return view('Layouts.purchased', compact('purchase'));
     }
 
     public function orders()
     {
-        $purchase = Order::with('clothe', 'color', 'size', 'user')->get();
-        $cookie = cookie('active', 'orders', 60 * 24 * 30);
-        return response()->view('admin.orders', compact('purchase'))->withCookie($cookie);
+        $purchase = Order::with('clothe', 'color', 'size', 'user')
+            ->orderBy('id', 'desc')
+            ->get();
+        // $cookie = cookie('active', 'orders', 60 * 24 * 30);
+        return response()->view('admin.orders', compact('purchase'));
     }
 
-    public function pendingOrders(){
-        $purchase = Order::with('clothe', 'color','size', 'user')->where('order_status', 'Pending')->get();
-        $cookie = cookie('active', 'orders', 60 * 24 * 30);
-        return response()->view('admin.orders', compact('purchase'))->withCookie($cookie);
+    public function pendingOrders()
+    {
+        $purchase = Order::with('clothe', 'color', 'size', 'user')
+            ->where('order_status', 'Pending')
+            ->orderBy('id', 'desc')
+            ->get();
+        // $cookie = cookie('active', 'orders', 60 * 24 * 30);
+        return response()->view('admin.orders', compact('purchase'));
     }
 
-    public function shippedOrders(){
-        $purchase = Order::with('clothe', 'color','size', 'user')->where('order_status', 'Shipped')->get();
-        $cookie = cookie('active', 'orders', 60 * 24 * 30);
-        return response()->view('admin.orders', compact('purchase'))->withCookie($cookie);
+    public function shippedOrders()
+    {
+        $purchase = Order::with('clothe', 'color', 'size', 'user')
+            ->where('order_status', 'Shipped')
+            ->orderBy('id', 'desc')
+            ->get();
+        // $cookie = cookie('active', 'orders', 60 * 24 * 30);
+        return response()->view('admin.orders', compact('purchase'));
     }
 
-    public function deliveredOrders(){
-        $purchase = Order::with('clothe', 'color','size', 'user')->where('order_status', 'Delivered')->get();
-        $cookie = cookie('active', 'orders', 60 * 24 * 30);
-        return response()->view('admin.orders', compact('purchase'))->withCookie($cookie);
+    public function deliveredOrders()
+    {
+        $purchase = Order::with('clothe', 'color', 'size', 'user')
+            ->where('order_status', 'Delivered')
+            ->orderBy('id', 'desc')
+            ->get();
+        // $cookie = cookie('active', 'orders', 60 * 24 * 30);
+        return response()->view('admin.orders', compact('purchase'));
     }
 
     public function orderDetails($id)
     {
-        $purchase = Order::with('clothe', 'color', 'size', 'user')->whereId($id)->first();
-        // return $purchase->user_id;
+        $purchase = Order::with('clothe', 'color', 'size', 'user', 'gift')->whereId($id)->first();
         // return $purchase;
         $link = 'productDetail/' . $purchase->clothe->id;
+        // $link = null;
         // return $link;
         $userAddress = Address::whereUserId($purchase->user_id)->first();
         return view('admin.orderDetails', compact('purchase', 'userAddress', 'link'));
@@ -126,8 +142,9 @@ class OrderController extends Controller
      * @param  \App\Models\Order  $order
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Order $order)
+    public function destroy($id)
     {
-        //
+        Order::find($id)->delete();
+        return redirect()->route('admin.orders')->with('success', 'Order deleted successfully');
     }
 }

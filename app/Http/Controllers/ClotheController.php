@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Clothe;
 use App\Models\Collection;
 use App\Models\Color;
+use App\Models\Gift;
 use App\Models\ProductColorTable;
+use App\Models\ProductGift;
 use App\Models\ProductImage;
 use App\Models\ProductSizeTable;
 use App\Models\Size;
@@ -23,30 +25,30 @@ class ClotheController extends Controller
     public function index()
     {
         $subCollection = SubCollection::with('products')->get();
-        $products = Clothe::with('productImages')->with('color')->with('size')->get();
+        $products = Clothe::with('productImages', 'size', 'color', 'gifts')->get();
         $colors = Color::get();
         $sizes = Size::get();
         $product_images = ProductImage::get();
         $subCollectionById = SubCollection::get();
         $productCount = Clothe::count();
-
+        $gifts = Gift::get();
         // return $products;
         $cookie = cookie('active', 'clothe', 60 * 24 * 30);
-        return response()->view('admin.clothes', compact('subCollection', 'products', 'product_images', 'subCollectionById', 'productCount', 'colors', 'sizes'))->withCookie($cookie);
-
+        return response()->view('admin.clothes', compact('subCollection', 'products', 'product_images', 'subCollectionById', 'productCount', 'colors', 'sizes', 'gifts'))->withCookie($cookie);
     }
 
     public function productById($id)
     {
-        $products = Clothe::with('productImages')->whereSubCollectionId($id)->get();
+        $products = Clothe::with('productImages', 'gifts')->whereSubCollectionId($id)->get();
         $subCollection = SubCollection::get();
         $subCollectionById = SubCollection::whereId($id)->get();
         $productCount = Clothe::whereSubCollectionId($id)->count();
         $colors = Color::get();
         $sizes = Size::get();
         // return $subCollection;
+        $gifts = Gift::get();
         $cookie = cookie('active', 'clothe', 60 * 24 * 30);
-        return response()->view('admin.clothes', compact('subCollection', 'products', 'subCollectionById', 'productCount', 'colors', 'sizes'))->withCookie($cookie);
+        return response()->view('admin.clothes', compact('subCollection', 'products', 'subCollectionById', 'productCount', 'colors', 'sizes', 'gifts'))->withCookie($cookie);
     }
 
     /**
@@ -56,7 +58,6 @@ class ClotheController extends Controller
      */
     public function create(Request $request)
     {
-
         // return $request->all();
         try {
 
@@ -121,6 +122,17 @@ class ClotheController extends Controller
                         'size_id' => $size,
                     ]);
                 }
+
+                if ($request['gifts']) {
+                    foreach ($request['gifts'] as $gift) {
+                        ProductGift::create([
+                            'clothe_id' => $clothe->id,
+                            'gift_id' => $gift,
+                        ]);
+                    }
+                }
+
+
                 // return redirect('/clothes');
                 toastr()->addSuccess('Product Color Added Successfully');
                 return redirect()->back();
@@ -161,7 +173,7 @@ class ClotheController extends Controller
      */
     public function editClothes($id)
     {
-        return Clothe::with('productImages', 'subCollection', 'color', 'size')->whereId($id)->first();
+        return Clothe::with('productImages', 'subCollection', 'color', 'size', 'gifts')->whereId($id)->first();
     }
 
     /**
@@ -279,6 +291,38 @@ class ClotheController extends Controller
                 }
             }
         }
+
+        //                      For Updating Gift
+        if ($request['edit_product_gift']) {
+            $product_gifts = $request['edit_product_gift'];
+            foreach ($product_gifts as $gift) {
+                $product_gift_arr[] = $gift;
+            }
+
+            $sizeArrSize = sizeof($product_gift_arr);
+            $productGift = ProductGift::where('clothe_id', $clothe->id)->get();
+            $productSizeSize = sizeof($productGift);
+            foreach ($product_gift_arr as $key => $gift) {
+                if ($key < sizeof($productGift)) {
+                    $productGift[$key]->update([
+                        'gift_id' => $gift,
+                    ]);
+                } else if ($key >= sizeof($productGift)) {
+                    ProductGift::create([
+                        'clothe_id' => $clothe->id,
+                        'gift_id' => $gift,
+                    ]);
+                }
+                if ($sizeArrSize < $productSizeSize) {
+                    for ($index = $sizeArrSize - 1; $index <= $productSizeSize - 1; $index++) {
+                        if ($index === 0) {
+                            continue;
+                        }
+                        $productGift[$index]->delete();
+                    }
+                }
+            }
+        }
         toastr()->addSuccess('Product Updated Successfully');
         return redirect()->back();
         // } catch (Exception $exception) {
@@ -330,6 +374,20 @@ class ClotheController extends Controller
             return redirect()->back();
         }
     }
+
+    public function destroyGift($clotheId, $giftId)
+    {
+        try {
+            // return [$clotheid, $sizeId];
+            ProductGift::where('clothe_id', $clotheId)->where('gift_id', $giftId)->delete();
+            toastr()->addSuccess('Gift Removed Successfully');
+            return redirect()->back();
+        } catch (Exception $exception) {
+            toastr()->addError($exception->getMessage() . ' ' . $exception->getLine());
+            return redirect()->back();
+        }
+    }
+
     public function destroyColor($clotheId, $colorId)
     {
         // return [$clotheid, $colorId];

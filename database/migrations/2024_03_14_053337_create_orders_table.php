@@ -19,6 +19,7 @@ class CreateOrdersTable extends Migration
             $table->string('clothe_id');
             $table->string('size_id');
             $table->string('color_id');
+            $table->string('gift_id');
             $table->string('quantity');
             $table->string('price');
             $table->string('total_price');

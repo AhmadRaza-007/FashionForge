@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Collection;
+use App\Models\Gift;
 use Illuminate\Support\Facades\Cookie;
 
 if (!function_exists('customHelperFunction')) {
@@ -10,3 +11,9 @@ if (!function_exists('customHelperFunction')) {
     }
 }
 
+if (!function_exists('getGift')) {
+    function getGift($id)
+    {
+        return Gift::find($id)->name;
+    }
+}

@@ -39,19 +39,19 @@ class UserController extends Controller
 
     public function frontLogin()
     {
-        return view('Layouts.login');
+        return view('Layouts.auth.login');
     }
 
     public function frontSignup()
     {
-        return view('Layouts.signup');
+        return view('Layouts.auth.signup');
     }
 
     public function postFrontLogin(Request $request)
     {
         $data = $request->validate([
             'email' => 'required|email',
-            'password' => 'required'
+            'password' => 'required|min:6'
         ]);
 
         $credentials = array_merge($data, ['user_type' => 2]);

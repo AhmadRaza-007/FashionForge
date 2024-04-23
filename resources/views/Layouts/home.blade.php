@@ -52,8 +52,8 @@
                                     <img src="{{ asset($product->productImages[0]->product_images) }}" class="product_image"
                                         alt="">
                                 @else
-                                <img src="{{ asset('assets/uploads/1701084944-1699862641-anime-cartoon-character-vector-illustration_648489-34.jpg.avif') }}"
-                                    class="product_image" alt="">
+                                    <img src="{{ asset('assets/uploads/1701084944-1699862641-anime-cartoon-character-vector-illustration_648489-34.jpg.avif') }}"
+                                        class="product_image" alt="">
                                 @endif
                             </div>
                             <div class="home_product_contant">

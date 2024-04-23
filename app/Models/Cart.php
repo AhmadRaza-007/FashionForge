@@ -12,6 +12,7 @@ class Cart extends Model
     protected $fillable = [
         'user_id',
         'clothe_id',
+        'gift_id',
         'size_id',
         'color_id',
         'quantity',
@@ -32,4 +33,10 @@ class Cart extends Model
     {
         return $this->belongsTo(Size::class);
     }
+
+    public function gift()
+    {
+        return $this->belongsTo(Gift::class);
+    }
+
 }

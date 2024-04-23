@@ -1,5 +1,7 @@
 @extends('admin')
 @section('content')
+    {{-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> --}}
 
     <style>
         .image_delete_btn {
@@ -135,19 +137,32 @@
                                 @enderror
                                 </span>
                             </div>
-                            <!-- <div class="mb-3" style="text-align: left;">
-                                <label for="product_size" class="form-label">Product Size</label>
-                                <input type="text" name="product_size" class="form-control" id="product_size" placeholder="Enter Collection" >
-                            </div> -->
                             <div class="mb-3" style="text-align: left;">
-                                <label for="product_price" class="form-label">Product Price</label>
-                                <input type="text" name="product_price" class="form-control" id="product_price"
-                                    placeholder="Enter Collection">
-                                <span class="text-danger">
-                                    @error('product_price')
-                                        {{ $message }}
-                                    @enderror
-                                </span>
+                                <div class="my-3">
+                                    <label for="product_price" class="form-label">Product Price</label>
+                                    <input type="text" name="product_price" class="form-control" id="product_price"
+                                        placeholder="Enter Collection">
+                                    <span class="text-danger">
+                                        @error('product_price')
+                                            {{ $message }}
+                                        @enderror
+                                    </span>
+                                </div>
+                                <div class="my-3">
+                                    <label for="product_price" class="form-label">Add Gift</label>
+                                    <select class="js-select2 form-select" name="gifts[]" id="gift"
+                                        multiple="multiple">
+                                        {{-- <option value="" selected disabled>Select Gift</option> --}}
+                                        @foreach ($gifts as $gift)
+                                            <option value="{{ $gift->id }}">{{ $gift->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    <span class="text-danger">
+                                        @error('gift')
+                                            {{ $message }}
+                                        @enderror
+                                    </span>
+                                </div>
                             </div>
 
                             <div class="img_container mt-4" style="grid-column: span 2;">
@@ -291,10 +306,6 @@
                                     </ul>
                                 </div>
                             </div>
-                            <!-- <div class="mb-3" style="text-align: left;">
-                                <label for="product_measurements" class="form-label">Product Measurements</label>
-                                <input type="text" name="edit_product_measurements" class="form-control" id="edit_product_measurements" placeholder="Enter Collection">
-                            </div> -->
                             <div class="mb-3" style="text-align: left;">
                                 <label for="product_size" class="form-label">Product Size</label>
                                 <!-- <input type="text" name="product_size" class="form-control" id="product_size" placeholder="Enter Collection" > -->
@@ -305,14 +316,34 @@
                                 @enderror
                                 </span>
                             </div>
-                            <!-- <div class="mb-3" style="text-align: left;">
-                            <label for="edit_product_size" class="form-label">Product Size</label>
-                            <input type="text" name="edit_product_size" class="form-control" id="edit_product_size" placeholder="Enter Collection" >
-                        </div> -->
                             <div class="mb-3" style="text-align: left;">
-                                <label for="edit_product_price" class="form-label">Product Price</label>
-                                <input type="text" name="edit_product_price" class="form-control"
-                                    id="edit_product_price" placeholder="Enter Collection">
+                                <div class="my-3">
+                                    <label for="edit_product_price" class="form-label">Product Price</label>
+                                    <input type="text" name="edit_product_price" class="form-control"
+                                        id="edit_product_price" placeholder="Enter Collection">
+                                </div>
+
+                                <div class="my-3">
+                                    <label for="product_price" class="form-label">Add Gift</label>
+                                    <select class="js-select2 form-select" name="edit_product_gift[]" id="gift"
+                                        multiple="multiple">
+                                        {{-- <option value="" selected disabled>Select Gift</option> --}}
+                                        @foreach ($gifts as $gift)
+                                            <option value="{{ $gift->id }}">{{ $gift->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    <div class="size_container">
+                                        <ul class="select2-selection__rendered d-flex flex-wrap" id="editGiftDisplay"
+                                            style="padding:0;">
+
+                                        </ul>
+                                    </div>
+                                    <span class="text-danger">
+                                        @error('gift')
+                                            {{ $message }}
+                                        @enderror
+                                    </span>
+                                </div>
                             </div>
 
                             <div class="img_container mt-4" style="grid-column: span 2;">
@@ -327,6 +358,7 @@
                                             style="border-radius: 0 5px 5px 0;"><i class="fa fa-plus"></i></button>
                                     </div>
                                 </div>
+
                                 <div class="plausButton" id="image_section2">
                                     <div class="plusButton"
                                         style="display: grid;grid-template-columns: 48% 48%;align-items: center;justify-content: space-between;">
@@ -407,9 +439,9 @@
                                     {{ $product->fabric_detail }}
                                 </td>
                                 <td>
-                                    <pre>
-                            {{ $product->Measurements }}
-                            </pre>
+                                    <pre style="max-width: 10rem">
+                                        {{ $product->Measurements }}
+                                    </pre>
                                 </td>
                                 <td class="d-flex">
                                     @foreach ($product->productImages as $image)
@@ -483,6 +515,14 @@
                     $("#editSizeDisplay").append(`<li class="select2-selection__choice d-flex mx-1 my-1" style="list-style: none;padding: 0.3rem .5rem;width: max-content;background-color: orange;border-radius: .5rem;color: black;">
                                         <a href="{{ url('admin/delete/clotheSize/${data.id}/${data.size[index].id}') }}" class="select2-selection__choice__remove mr-2" role="presentation" style="cursor: pointer;font-weight:bolder">×</a>
                                         <div class="color">${data.size[index].size}</div>
+                                    </li>`);
+                }
+                $("#editGiftDisplay").text('');
+                for (let index = 0; index < data.gifts.length; index++) {
+                    // const element = data.color[index];
+                    $("#editGiftDisplay").append(`<li class="select2-selection__choice d-flex mx-1 my-1" style="list-style: none;padding: 0.3rem .5rem;width: max-content;background-color: orange;border-radius: .5rem;color: black;">
+                                        <a href="{{ url('admin/delete/clotheGift/${data.id}/${data.gifts[index].id}') }}" class="select2-selection__choice__remove mr-2" role="presentation" style="cursor: pointer;font-weight:bolder">×</a>
+                                        <div class="color">${data.gifts[index].name}</div>
                                     </li>`);
                 }
                 $("#edit_sub_collection_image").attr('src', data.image);

@@ -154,6 +154,10 @@
             <i class="fas fa-file-upload"></i>
             Orders
         </a> --}}
+        <a href="{{ route('gift') }}" class="dashboard-nav-item">
+            <i class="fas fa-cogs"></i>
+            gifts
+        </a>
         <a href="#" class="dashboard-nav-item">
             <i class="fas fa-cogs"></i>
             Settings

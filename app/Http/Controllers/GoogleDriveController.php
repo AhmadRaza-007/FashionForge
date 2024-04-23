@@ -11,27 +11,27 @@ class GoogleDriveController extends Controller
 {
     // public $gClient;
 
-    // function __construct()
-    // {
+    function __construct()
+    {
 
-    //     $this->gClient = new \Google_Client();
+        $this->gClient = new \Google_Client();
 
-    //     $this->gClient->setApplicationName('Fashion Forge'); // ADD YOUR AUTH2 APPLICATION NAME (WHEN YOUR GENERATE SECRATE KEY)
-    //     $this->gClient->setClientId('468787788273-5pc52mfi5d1o3ob8t86sdsge1pikeh2q.apps.googleusercontent.com');
-    //     $this->gClient->setClientSecret('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');
-    //     // 308799378314-e0sn7hivc4ikaphguhq7npgnaie83f6i.apps.googleusercontent.com
-    //     // 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
-    //     $this->gClient->setRedirectUri(route('google.login'));
-    //     $this->gClient->setDeveloperKey('AIzaSyCY5z4BjwrnS_t-QK4Rc5nXNL0974c-D6A');
-    //     $this->gClient->setScopes(array(
-    //         'https://www.googleapis.com/auth/drive.file',
-    //         'https://www.googleapis.com/auth/drive'
-    //     ));
+        $this->gClient->setApplicationName('Fashion Forge'); // ADD YOUR AUTH2 APPLICATION NAME (WHEN YOUR GENERATE SECRATE KEY)
+        $this->gClient->setClientId('468787788273-5pc52mfi5d1o3ob8t86sdsge1pikeh2q.apps.googleusercontent.com');
+        $this->gClient->setClientSecret('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');
+        // 308799378314-e0sn7hivc4ikaphguhq7npgnaie83f6i.apps.googleusercontent.com
+        // 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
+        $this->gClient->setRedirectUri(route('google.login'));
+        $this->gClient->setDeveloperKey('AIzaSyCY5z4BjwrnS_t-QK4Rc5nXNL0974c-D6A');
+        $this->gClient->setScopes(array(
+            'https://www.googleapis.com/auth/drive.file',
+            'https://www.googleapis.com/auth/drive'
+        ));
 
-    //     $this->gClient->setAccessType("offline");
+        $this->gClient->setAccessType("offline");
 
-    //     $this->gClient->setApprovalPrompt("force");
-    // }
+        $this->gClient->setApprovalPrompt("force");
+    }
 
     // public function googleLogin(Request $request)
     // {

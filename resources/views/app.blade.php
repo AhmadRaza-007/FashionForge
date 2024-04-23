@@ -22,14 +22,17 @@
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+    <!--    Data Tables     -->
+    <link href="{{ asset('dataTables/datatablestyle.css') }}" rel="stylesheet" />
+
     <title>Document</title>
 </head>
 
 <body>
 
-    @include('Layouts.header')
+    @include('Layouts.include.header')
     @yield('content')
-    @include('Layouts.footer')
+    @include('Layouts.include.footer')
 
 
     <script src="{{ asset('assets/bannerSlider/slider.js') }}"></script>
@@ -39,6 +42,11 @@
         let buyNow = document.getElementById('detail_image')
         console.log(buyNow);
     </script> -->
+
+
+    <!--    Data Tables     -->
+    <script src="{{ asset('dataTables/simple-datatables.js') }}" crossorigin="anonymous"></script>
+    <script src="{{ asset('dataTables/datatables-simple-demo.js') }}"></script>
 </body>
 
 </html>

@@ -14,6 +14,7 @@ class Order extends Model
         'clothe_id',
         'size_id',
         'color_id',
+        'gift_id',
         'quantity',
         'price',
         'total_price',
@@ -39,5 +40,10 @@ class Order extends Model
     public function size()
     {
         return $this->belongsTo(Size::class);
+    }
+
+    public function gift()
+    {
+        return $this->belongsTo(Gift::class);
     }
 }

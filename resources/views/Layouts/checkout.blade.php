@@ -602,151 +602,91 @@
                 </div>
             </section>
             <section>
-                @if ($isGift)
-                    <div class="col-md-12 col-lg-12 order-md-last" style="position: sticky; top:3rem">
-                        @if ($products)
-                            <h4 class="d-flex justify-content-between align-items-center mb-3">
-                                <span class="text-primary">Your cart</span>
-                                <span class="badge bg-primary rounded-pill">{{ $products->count() }}</span>
-                            </h4>
-                            <ul class="list-group mb-3">
-                                @foreach ($products as $product)
-                                    <li class="list-group-item d-flex justify-content-between lh-sm">
-                                        <div>
-                                            <h4 class="my-0">{{ $product->name }}</h4>
-                                            <small class="text-muted">{{ $product->fabric_detail }}</small>
-                                            <br>
-                                            {{-- @foreach ($product->color->where('id', $request->color) as $color)
-                                                Color: <small class="text-muted">{{ $color->color }}</small>
-                                                <br>
-                                            @endforeach
-                                            @foreach ($product->size->where('id', $request->size) as $size)
-                                                Size: <small class="text-muted">{{ $size->size }}</small>
-                                                <br>
-                                            @endforeach
-                                            @foreach ($product->size->where('id', $request->size) as $size)
-                                                Quantity: <small class="text-muted">{{ $request->quantity }}</small>
-                                                <br>
-                                            @endforeach --}}
-                                        </div>
-                                        <span class="text-muted">Rs.{{ $product->price }}</span>
-                                    </li>
-                                    <input type="hidden" name="{{ 'product[]' }}" value="{{ $product->id }}">
-                                    <input type="hidden" name="{{ 'color[]' }}" value="{{ $request->color }}">
-                                    <input type="hidden" name="{{ 'size[]' }}" value="{{ $request->size }}">
-                                    <input type="hidden" name="{{ 'quantity[]' }}" value="{{ $request->quantity }}">
-                                    <input type="hidden" name="{{ 'price[]' }}" value="{{ $product->price }}">
-                                @endforeach
-                            </ul>
-                        @else
-                            <h4 class="d-flex justify-content-between align-items-center mb-3">
-                                <span class="text-primary">Your cart</span>
-                                <span class="badge bg-primary rounded-pill">{{ $items->count() }}</span>
-                            </h4>
-                            <ul class="list-group mb-3">
-                                @foreach ($items as $key => $product)
-                                    <li class="list-group-item d-flex justify-content-between lh-sm">
-                                        <div>
-                                            <h4 class="my-0">{{ $product->clothe->name }}</h4>
-                                            <small class="text-muted">{{ $product->clothe->fabric_detail }}</small><br>
-                                            Color: <small class="text-muted">{{ $product->color->color }}</small><br>
-                                            Size: <small class="text-muted">{{ $product->size->size }}</small><br>
-                                            Quantity: <small class="text-muted">{{ $product->quantity }}</small><br>
-                                        </div>
-                                        <span class="text-muted">Rs.{{ $product->price }}</span>
-                                    </li>
-                                    <input type="hidden" name="{{ 'product[]' }}"
-                                        value="{{ $product->clothe->id }}">
-                                    <input type="hidden" name="{{ 'color[]' }}" value="{{ $product->color->id }}">
-                                    <input type="hidden" name="{{ 'size[]' }}" value="{{ $product->size->id }}">
-                                    <input type="hidden" name="{{ 'quantity[]' }}" value="{{ $product->quantity }}">
-                                    <input type="hidden" name="{{ 'price[]' }}" value="{{ $product->price }}">
-                                @endforeach
-                            </ul>
-                        @endif
 
+                <div class="col-md-12 col-lg-12 order-md-last" style="position: sticky; top:3rem">
+                    @if ($products)
+                        <h4 class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="text-primary">Your cart</span>
+                            <span class="badge bg-primary rounded-pill">{{ $products->count() }}</span>
+                        </h4>
                         <ul class="list-group mb-3">
-                            <li class="list-group-item d-flex justify-content-between">
-                                <span>Total (Rupee)</span>
-                                {{-- <strong>₹1500</strong> --}}
-                                <strong>Rs.{{ $total ?? $product->price * $request->quantity }}</strong>
-                            </li>
-                        </ul>
-
-                    </div>
-                @else
-                    <div class="col-md-12 col-lg-12 order-md-last" style="position: sticky; top:3rem">
-                        @if ($products)
-                            <h4 class="d-flex justify-content-between align-items-center mb-3">
-                                <span class="text-primary">Your cart</span>
-                                <span class="badge bg-primary rounded-pill">{{ $products->count() }}</span>
-                            </h4>
-                            <ul class="list-group mb-3">
-                                @foreach ($products as $product)
-                                    <li class="list-group-item d-flex justify-content-between lh-sm">
-                                        <div>
-                                            <h4 class="my-0">{{ $product->name }}</h4>
-                                            <small class="text-muted">{{ $product->fabric_detail }}</small>
+                            @foreach ($products as $product)
+                                <li class="list-group-item d-flex justify-content-between lh-sm">
+                                    <div>
+                                        <h4 class="my-0">{{ $product->name }}</h4>
+                                        @if ($request->gift)
+                                            Gift: <small class="text-muted">{{ getGift($request->gift) }}</small><br>
+                                        @endif
+                                        <small class="text-muted">{{ $product->fabric_detail }}</small>
+                                        <br>
+                                        @foreach ($product->color->where('id', $request->color) as $color)
+                                            Color: <small class="text-muted">{{ $color->color }}</small>
                                             <br>
-                                            @foreach ($product->color->where('id', $request->color) as $color)
-                                                Color: <small class="text-muted">{{ $color->color }}</small>
-                                                <br>
-                                            @endforeach
-                                            @foreach ($product->size->where('id', $request->size) as $size)
-                                                Size: <small class="text-muted">{{ $size->size }}</small>
-                                                <br>
-                                            @endforeach
-                                            @foreach ($product->size->where('id', $request->size) as $size)
-                                                Quantity: <small class="text-muted">{{ $request->quantity }}</small>
-                                                <br>
-                                            @endforeach
-                                        </div>
-                                        <span class="text-muted">Rs.{{ $product->price }}</span>
-                                    </li>
-                                    <input type="hidden" name="{{ 'product[]' }}" value="{{ $product->id }}">
-                                    <input type="hidden" name="{{ 'color[]' }}" value="{{ $request->color }}">
-                                    <input type="hidden" name="{{ 'size[]' }}" value="{{ $request->size }}">
-                                    <input type="hidden" name="{{ 'quantity[]' }}" value="{{ $request->quantity }}">
-                                    <input type="hidden" name="{{ 'price[]' }}" value="{{ $product->price }}">
-                                @endforeach
-                            </ul>
-                        @else
-                            <h4 class="d-flex justify-content-between align-items-center mb-3">
-                                <span class="text-primary">Your cart</span>
-                                <span class="badge bg-primary rounded-pill">{{ $items->count() }}</span>
-                            </h4>
-                            <ul class="list-group mb-3">
-                                @foreach ($items as $key => $product)
-                                    <li class="list-group-item d-flex justify-content-between lh-sm">
-                                        <div>
-                                            <h4 class="my-0">{{ $product->clothe->name }}</h4>
-                                            <small class="text-muted">{{ $product->clothe->fabric_detail }}</small><br>
-                                            Color: <small class="text-muted">{{ $product->color->color }}</small><br>
-                                            Size: <small class="text-muted">{{ $product->size->size }}</small><br>
-                                            Quantity: <small class="text-muted">{{ $product->quantity }}</small><br>
-                                        </div>
-                                        <span class="text-muted">Rs.{{ $product->price }}</span>
-                                    </li>
-                                    <input type="hidden" name="{{ 'product[]' }}"
-                                        value="{{ $product->clothe->id }}">
-                                    <input type="hidden" name="{{ 'color[]' }}" value="{{ $product->color->id }}">
-                                    <input type="hidden" name="{{ 'size[]' }}" value="{{ $product->size->id }}">
-                                    <input type="hidden" name="{{ 'quantity[]' }}" value="{{ $product->quantity }}">
-                                    <input type="hidden" name="{{ 'price[]' }}" value="{{ $product->price }}">
-                                @endforeach
-                            </ul>
-                        @endif
-
-                        <ul class="list-group mb-3">
-                            <li class="list-group-item d-flex justify-content-between">
-                                <span>Total (Rupee)</span>
-                                {{-- <strong>₹1500</strong> --}}
-                                <strong>Rs.{{ $total ?? $product->price * $request->quantity }}</strong>
-                            </li>
+                                        @endforeach
+                                        @foreach ($product->size->where('id', $request->size) as $size)
+                                            Size: <small class="text-muted">{{ $size->size }}</small>
+                                            <br>
+                                        @endforeach
+                                        @foreach ($product->size->where('id', $request->size) as $size)
+                                            Quantity: <small class="text-muted">{{ $request->quantity }}</small>
+                                            <br>
+                                        @endforeach
+                                    </div>
+                                    <span class="text-muted">Rs.{{ $product->price }}</span>
+                                </li>
+                                <input type="hidden" name="{{ 'product[]' }}" value="{{ $product->id }}">
+                                <input type="hidden" name="{{ 'color[]' }}" value="{{ $request->color }}">
+                                <input type="hidden" name="{{ 'size[]' }}" value="{{ $request->size }}">
+                                <input type="hidden" name="{{ 'quantity[]' }}" value="{{ $request->quantity }}">
+                                <input type="hidden" name="{{ 'price[]' }}" value="{{ $product->price }}">
+                                {{-- {{ $request->gift }} --}}
+                                @if ($request->gift)
+                                    <input type="hidden" name="{{ 'gift_id[]' }}" value="{{ $request->gift }}">
+                                @endif
+                            @endforeach
                         </ul>
+                    @else
+                        <h4 class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="text-primary">Your cart</span>
+                            <span class="badge bg-primary rounded-pill">{{ $items->count() }}</span>
+                        </h4>
+                        <ul class="list-group mb-3">
+                            @foreach ($items as $key => $product)
+                                <li class="list-group-item d-flex justify-content-between lh-sm">
+                                    <div>
+                                        <h4 class="my-0">{{ $product->clothe->name }}</h4>
+                                        @if ($product->gift)
+                                            Gift: <small class="text-muted">{{ $product->gift->name }}</small><br>
+                                        @endif
+                                        {{-- <small class="text-muted">{{ $product->clothe->fabric_detail }}</small><br> --}}
+                                        Color: <small class="text-muted">{{ $product->color->color }}</small><br>
+                                        Size: <small class="text-muted">{{ $product->size->size }}</small><br>
+                                        Quantity: <small class="text-muted">{{ $product->quantity }}</small><br>
+                                    </div>
+                                    <span class="text-muted">Rs.{{ $product->price }}</span>
+                                </li>
+                                <input type="hidden" name="{{ 'product[]' }}" value="{{ $product->clothe->id }}">
+                                <input type="hidden" name="{{ 'color[]' }}" value="{{ $product->color->id }}">
+                                <input type="hidden" name="{{ 'size[]' }}" value="{{ $product->size->id }}">
+                                <input type="hidden" name="{{ 'quantity[]' }}" value="{{ $product->quantity }}">
+                                <input type="hidden" name="{{ 'price[]' }}" value="{{ $product->price }}">
+                                @if ($product->gift)
+                                    <input type="hidden" name="{{ 'gift_id[]' }}" value="{{ $product->gift->id }}">
+                                @endif
+                            @endforeach
+                        </ul>
+                    @endif
 
-                    </div>
-                @endif
+                    <ul class="list-group mb-3">
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Total (Rupee)</span>
+                            {{-- <strong>₹1500</strong> --}}
+                            <strong>Rs.{{ $total ?? $product->price * $request->quantity }}</strong>
+                        </li>
+                    </ul>
+
+                </div>
+
 
             </section>
         </form>

@@ -21,7 +21,7 @@ function slider(slideIdentifier, custom_options) {
         autoRun: true,
         random: false,
         direction: true,
-        navigation: false
+        navigation: true
     };
 
     this.options = {};

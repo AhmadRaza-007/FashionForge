@@ -8,9 +8,11 @@ use App\Http\Controllers\Frontend\FrontendController;
 use App\Http\Controllers\Frontend\SectionController;
 use App\Http\Controllers\GiftController;
 use App\Http\Controllers\GoogleDriveController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\SubCollectionController;
 use App\Http\Controllers\UserController;
 use App\Models\Order;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,12 +30,30 @@ use Illuminate\Support\Facades\Route;
 //     return view('app');
 // });
 
+Route::get('/clear-cache', function () {
+    Artisan::call('cache:clear');
+    Artisan::call('route:clear');
 
+    return "Cache cleared successfully";
+});
+
+Route::get('/clear-log', function () {
+    Artisan::call('logs:clear');
+
+    return "Logs cleared successfully";
+});
+
+
+//////////////////////////////  User Login Routes  //////////////////////////////////
 Route::get('/login', [UserController::class, 'frontLogin'])->name('user.login');
 Route::post('/post/login', [UserController::class, 'postFrontLogin'])->name('user.postLogin');
 Route::get('/signup', [UserController::class, 'frontSignup'])->name('user.signup');
 Route::post('/post/signup', [UserController::class, 'postFrontSignup'])->name('user.postSignup');
 
+//////////////////////////////  User Login Routes  //////////////////////////////////
+Route::post('/review/{product_id}', [ReviewController::class, 'review'])->name('review');
+
+//////////////////////////////  Admin Login Routes  //////////////////////////////////
 Route::redirect('/', '/home', 301);
 Route::get('/home', [FrontendController::class, 'index'])->name('user.homeSection');
 Route::get('/category/{id}', [FrontendController::class, 'category'])->name('user.category');
@@ -88,6 +108,7 @@ Route::group(['middleware' => 'auth', 'middleware' => 'AdminCheck'], function ()
         Route::get('/delete/clothes/{id}', [ClotheController::class, 'destroy'])->name('admin.deleteClothes');
         Route::get('/delete/clotheImage/{id}', [ClotheController::class, 'destroyImage'])->name('admin.deleteClothesImage');
         Route::get('/delete/clotheSize/{clotheId}/{sizeId}', [ClotheController::class, 'destroySize'])->name('admin.destroySize');
+        Route::get('/delete/clotheGift/{clotheId}/{giftId}', [ClotheController::class, 'destroyGift'])->name('admin.destroyGift');
         Route::get('/delete/clotheColor/{clotheId}/{colorId}', [ClotheController::class, 'destroyColor'])->name('admin.destroyColor');
 
         //////////////////////////////  Users  //////////////////////////////////
@@ -100,18 +121,15 @@ Route::group(['middleware' => 'auth', 'middleware' => 'AdminCheck'], function ()
         Route::get('/orders/delivered', [OrderController::class, 'deliveredOrders'])->name('admin.deliveredOrders');
         Route::get('/order/detail/{id}', [OrderController::class, 'orderDetails'])->name('admin.orders.detail');
         Route::post('/orderstatus/update/{id}', [OrderController::class, 'orderStatus'])->name('orderStatus.update');
+        Route::get('/order/delete/{id}', [OrderController::class, 'destroy'])->name('order.delete');
 
         //////////////////////////////  For Adding Gift  //////////////////////////////////
-        Route::get('/gift', [GiftController::class, 'index']);
+        Route::get('/gift', [GiftController::class, 'index'])->name('gift');
         Route::post('/gift/create', [GiftController::class, 'store'])->name('gift.create');
         Route::get('/gift/edit/{id}', [GiftController::class, 'edit'])->name('gift.edit');
         Route::post('/gift/update', [GiftController::class, 'update'])->name('gift.update');
         Route::get('/gift/delete/{id}', [GiftController::class, 'destroy'])->name('gift.delete');
 
-        //////////////////////////////  For Adding Products  //////////////////////////////////
-        // Route::get('/sidebar/active', function () {
-
-        // })->name('admin.sidebar.active');
         //////////////////////////////  LogOut  //////////////////////////////////
         Route::post('/postLogout', [UserController::class, 'postLogout'])->name('admin.postLogout');
     });
@@ -130,18 +148,18 @@ Route::get('checkout', [FrontendController::class, 'Checkout'])->name('cart.chec
 // Route::get('factorial/{num}', [FrontendController::class, 'factorial'])->name('slug');
 
 
-Route::get('drive', function () {
-    return view('admin.googledrive');
-});
+// Route::get('drive', function () {
+//     return view('admin.googledrive');
+// });
 
 
-Route::get('getfile', [FileController::class, 'index']);
-Route::post('file', [FileController::class, 'store']);
+// Route::get('getfile', [FileController::class, 'index']);
+// Route::post('file', [FileController::class, 'store']);
 
 
 
 // Route::get('google/login',[GoogleDriveController::class,'googleLogin'])->name('google.login');
 // Route::get('google-drive/file-upload',[GoogleDriveController::class,'googleDriveFilePpload'])->name('google.drive.file.upload');
 
-Route::get('google/login', [GoogleDriveController::class, 'provider'])->name('google.login');
-Route::get('google/callback', [GoogleDriveController::class, 'callbackHandle'])->name('google.callback');
+// Route::get('google/login', [GoogleDriveController::class, 'provider'])->name('google.login');
+// Route::get('google/callback', [GoogleDriveController::class, 'callbackHandle'])->name('google.callback');

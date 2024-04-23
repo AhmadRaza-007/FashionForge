@@ -16,6 +16,7 @@ class Clothe extends Model
         'price',
         'fabric_detail',
         'Measurements',
+        'gift_id',
     ];
 
     public function productImages() {
@@ -39,5 +40,13 @@ class Clothe extends Model
     public function size()
     {
         return $this->belongsToMany(Size::class, 'product_size_tables');
+    }
+
+    public function gifts(){
+        return $this->belongsToMany(Gift::class, 'product_gifts');
+    }
+
+    public function reviews(){
+        return $this->hasMany(Review::class, 'product_id');
     }
 }

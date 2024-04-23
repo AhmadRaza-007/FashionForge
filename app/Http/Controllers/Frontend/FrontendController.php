@@ -13,6 +13,7 @@ use App\Models\Order;
 use App\Models\SubCollection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class FrontendController extends Controller
 {
@@ -27,30 +28,45 @@ class FrontendController extends Controller
         $products = Clothe::with('productImages')->paginate(12);
         $subCollection = SubCollection::get();
         // return $subCollection;
+        // header("Refresh:0");
         return view('Layouts.home', compact('products', 'subCollection'));
     }
 
     public function productDetail($id)
     {
-        $products = Clothe::with('productImages', 'subCollection')->where('id', $id)->get();
+        $products = Clothe::with('productImages', 'subCollection', 'gifts', 'reviews')->where('id', $id)->get();
         // return $products;
         $isGift = false;
-        return view('Layouts.detail', compact('products', 'isGift'));
+        $reviews = $products[0]->reviews;
+
+        $totalRatings = 0;
+        $numReviews = count($reviews);
+
+        // Calculate total ratings sum
+        foreach ($reviews as $review) {
+            $totalRatings += (int)$review['rating']; // Convert rating to integer for sum calculation
+        }
+
+        // Calculate overall rating
+        $overallRating = $numReviews > 0 ? $totalRatings / $numReviews : 0;
+
+        return view('Layouts.detail', compact('products', 'isGift', 'overallRating'));
     }
 
     public function cart()
     {
-        if (Auth::check()) {
-            $cartProducts = Cart::where('user_id', auth()->user()->id)->with('clothe', 'color', 'size')->get();
-            $cartPriceTotal = Cart::where('user_id', auth()->user()->id)->get();
-
-            $total = null;
-            foreach ($cartPriceTotal as $key => $price) {
-                $total += $price->price * $price->quantity;
-            }
-            return view('Layouts.cart', compact('cartProducts', 'total'));
+        if (!Auth::check()) {
+            return redirect()->route('user.login');
         }
-        return redirect()->route('user.login');
+
+        $cartProducts = Cart::where('user_id', auth()->user()->id)->with('clothe', 'color', 'size', 'gift')->get();
+        $cartPriceTotal = Cart::where('user_id', auth()->user()->id)->get();
+
+        $total = null;
+        foreach ($cartPriceTotal as $key => $price) {
+            $total += $price->price * $price->quantity;
+        }
+        return view('Layouts.cart', compact('cartProducts', 'total'));
     }
 
     public function postCart($request, $id)
@@ -62,6 +78,7 @@ class FrontendController extends Controller
                 'clothe_id' => $id,
                 'size_id' => $request->size,
                 'color_id' => $request->color,
+                'gift_id' => $request->gift,
                 'quantity' => $request->quantity,
                 'price' => $request->hidden_price,
             ]);
@@ -109,7 +126,7 @@ class FrontendController extends Controller
     public function checkout()
     {
         // return Auth::user();
-        $items = Cart::with('clothe', 'color', 'size')->where('user_id', Auth::user()->id)->get();
+        $items = Cart::with('clothe', 'color', 'size', 'gift')->where('user_id', Auth::user()->id)->get();
         $products = null;
 
         $cartPriceTotal = Cart::where('user_id', Auth::user()->id)->get();
@@ -126,6 +143,7 @@ class FrontendController extends Controller
 
     public function checkout2($request, $id)
     {
+        // return $request;
         $isGift = $request->isGift;
         if (!$request->isGift) {
             $products = Clothe::whereId($id)->with('color', 'size', 'productImages')->get();
@@ -139,6 +157,8 @@ class FrontendController extends Controller
 
     public function check(Request $request, $id)
     {
+        // return $request->all();
+        Log::error('Checking log working...');
         switch ($request->input('action')) {
             case 'buy_now':
                 // $request->all();
@@ -213,6 +233,7 @@ class FrontendController extends Controller
                     'clothe_id' => $value['product'][$i],
                     'size_id' => $value['size'][$i],
                     'color_id' => $value['color'][$i],
+                    'gift_id' => $value['gift_id'][$i],
                     'quantity' => $value['quantity'][$i],
                     'price' => $value['price'][$i] * $value['quantity'][$i],
                     'total_price' => $total_price,

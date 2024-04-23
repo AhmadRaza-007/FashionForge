@@ -1,6 +1,6 @@
 @extends('app')
 @section('content')
-    {{-- <link href="https://unpkg.com/filepond@^4/dist/filepond.css" rel="stylesheet" />
+    <link href="https://unpkg.com/filepond@^4/dist/filepond.css" rel="stylesheet" />
     <style>
         .filepond--credits {
             display: none !important
@@ -37,7 +37,7 @@
                 <input type="submit" value="Upload" class="btn btn-dark">
             </div>
         </form>
-    </div> --}}
+    </div>
     {{-- <script src="https://unpkg.com/filepond@^4/dist/filepond.js"></script>
     <script>
         // Get a reference to the file input element
@@ -130,7 +130,7 @@
 
 
 
-    <!doctype html>
+    {{-- <!doctype html>
     <html lang="en">
 
     <head>
@@ -182,12 +182,12 @@
 
         <!-- jQuery -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <!-- Bootstrap JS Bundle with Popper -->
+        <!-- Bootstrap JS Bundle with Popper --> --}}
         {{-- <script src="{{ asset('assets/js/bootstrap5-bundle.min.js') }}"></script> --}}
         <!-- Resumable JS -->
-        <script src="https://cdn.jsdelivr.net/npm/resumablejs@1.1.0/resumable.min.js"></script>
+        {{-- <script src="https://cdn.jsdelivr.net/npm/resumablejs@1.1.0/resumable.min.js"></script> --}}
 
-        <script type="text/javascript">
+        {{-- <script type="text/javascript">
             let browseFile = $('#browseFile');
             let resumable = new Resumable({
                 target: '{{ url('file') }}',
@@ -241,7 +241,7 @@
             function hideProgress() {
                 progress.hide();
             }
-        </script>
+        </script> --}}
     </body>
 
     </html>

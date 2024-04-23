@@ -28,6 +28,7 @@
                         <thead>
                             <tr>
                                 <th>Product</th>
+                                <th>Gift</th>
                                 <th>Quantity</th>
                                 <th>Total</th>
                             </tr>
@@ -56,6 +57,29 @@
                                                 </div>
                                             </div>
                                         </div>
+                                    </td>
+                                    <td>
+                                        @if ($product->gift)
+                                            <div class="detail_more_images d-flex mt-2" style="height: 12rem;">
+                                                <div class="detail_images_sm mx-1 d-flex" style="height: 100%;">
+                                                    <img src="{{ $product->gift->image }}" alt="">
+                                                </div>
+                                                <input type="hidden" value="{{ $product->gift->id }}" name="gift_id">
+                                                {{-- <div class="cart_product_details mx-2" style="margin-left: 2rem !important;"> --}}
+                                                {{-- <div class="title" style="width: 17rem;"> --}}
+                                                {{-- <a href="{{ route('user.homeSection') }}">
+                                                        <h3 style="margin: 0;">{{ $product->gift->name }}</h3>
+                                                    </a> --}}
+                                                {{-- <div class="d-flex"
+                                                    style="height: 5rem;flex-direction: column;justify-content: space-between;font-size: 1.1rem;font-weight:400;margin-top: 1rem;">
+                                                    <span>Rs. {{ $product->clothe->price }}</span>
+                                                    <span>Size: {{ $product->size->size }}</span>
+                                                    <span>Color: {{ $product->color->color }}</span>
+                                                </div> --}}
+                                                {{-- </div> --}}
+                                                {{-- </div> --}}
+                                            </div>
+                                        @endif
                                     </td>
                                     <td class="">
                                         <form id="{{ 'createForm' . $product->id }}" action="javascript:void(0)">

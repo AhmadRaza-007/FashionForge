@@ -2,8 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Clothe;
+use App\Models\Color;
 use App\Models\Gift;
+use App\Models\ProductImage;
+use App\Models\Size;
+use App\Models\SubCollection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class GiftController extends Controller
 {
@@ -12,10 +18,20 @@ class GiftController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    // public function index()
+    // {
+    // $gifts = Gift::get();
+    // return view('admin.gift', compact('gifts'));
+    // }
+
+    public function index(Request $request)
     {
-        $gifts = Gift::get();
-        return view('admin.gift', compact('gifts'));
+        $products = Gift::get();
+        $productCount = Gift::count();
+
+        // return $products;
+        return response()->view('admin.gift', compact('products', 'productCount'));
+        // return redirect()->back()->withErrors();
     }
 
     /**
@@ -36,28 +52,31 @@ class GiftController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required',
-            'price' => 'required',
-            'image' => 'required',
-        ]);
+        try {
+            // return $request->all();
+            $image_path = null;
+            if ($request->file('image')) {
+                $file = $request->file('image');
+                $fileName = time() . '-' . $file->getClientOriginalName();
+                $file->move(public_path('uploads'), $fileName);
+                $image_path = 'uploads/' . $fileName;
+            }
 
-        $imagePath = '';
-        if ($request->has('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '.' . $image->getClientOriginalName();
-            $image->move(public_path('uploads'), $imageName);
-            $imagePath = 'uploads/' . $imageName;
+            Gift::create([
+                'name' => $request->gift_name,
+                'gift_detail' => $request->gift_detail,
+                'image' => $image_path,
+                'image_url' => $request->image_url,
+            ]);
+
+            // return redirect('/clothes');
+            toastr()->addSuccess('Product Color Added Successfully');
+            return redirect()->back();
+            // }
+        } catch (Exception $exception) {
+            toastr()->addError('Something Went Wrong' . $exception->getMessage() . ' ' . $exception->getLine());
+            return redirect()->back();
         }
-
-        Gift::create([
-            'name' => $request->name,
-            'details' => $request->details,
-            'price' => $request->price,
-            'image' => $imagePath,
-        ]);
-
-        return redirect()->back();
     }
 
     /**
@@ -91,26 +110,26 @@ class GiftController extends Controller
      */
     public function update(Request $request, Gift $gift)
     {
-        $request->validate([
-            'name' => 'required',
-            'price' => 'required',
-        ]);
-        $imagePath = null;
-        // return isset($imagePath) ? 'true' : 'false';
-        $previousImage = $gift->find($request->id)->image;
-
-        if ($request->has('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '.' . $image->getClientOriginalName();
-            $image->move(public_path('uploads'), $imageName);
-            $imagePath = 'uploads/' . $imageName;
+        // return $request->all();
+        // $request->validate([
+        //     'name' => 'required',
+        //     'price' => 'required',
+        // ]);
+        $image_path = null;
+        if ($request->file('image')) {
+            $file = $request->file('image');
+            $fileName = time() . '-' . $file->getClientOriginalName();
+            $file->move(public_path('uploads'), $fileName);
+            $image_path = 'uploads/' . $fileName;
         }
+        // return isset($imagePath) ? 'true' : 'false';
+        $previousImage = $gift->find($request->gift_id_hidden)->image;
 
-        $gift->find($request->id)->update([
-            'name' => $request->name,
-            'details' => $request->details,
-            'price' => $request->price,
-            'image' => isset($imagePath) ? $imagePath : $previousImage,
+        $gift->find($request->gift_id_hidden)->update([
+            'name' => $request->gift_name,
+            'gift_detail' => $request->gift_detail,
+            'image' => isset($image_path) ? $image_path : $previousImage,
+            'image_url' => $request->image_url,
         ]);
 
         return redirect()->back();
