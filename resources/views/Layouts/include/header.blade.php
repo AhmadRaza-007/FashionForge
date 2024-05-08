@@ -103,7 +103,7 @@
         </div>
     </div>
 
-    <div class="search_bar" id="search_bar">
+    {{-- <div class="search_bar" id="search_bar">
         <div class="d-flex justify-content-center align-items-center">
             <form class="footer_email_input">
                 @csrf
@@ -116,5 +116,5 @@
                 <span class="material-symbols-outlined">close</span>
             </div>
         </div>
-    </div>
+    </div> --}}
 </header>

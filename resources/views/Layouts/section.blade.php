@@ -21,9 +21,7 @@
                     </div>
                     <div class="home_product_contant">
                         <div class="home_product_information">
-
                             <h3>{{ $product->name ?? 'Null' }}</h3>
-
                         </div>
                         <div class="home_product_price">
                             <span>Rs. {{ $product->price ?? 'Null' }}.00 PKR</span>
@@ -35,4 +33,12 @@
         </div>
     </section>
 </div>
+
+<script>
+    containerDiv = document.getElementById('women')
+
+    // if (window.innerWidth < 1300) {
+    //     containerDiv.classList.remove('container');
+    // }
+</script>
 @endsection

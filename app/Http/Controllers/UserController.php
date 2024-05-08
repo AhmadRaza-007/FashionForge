@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Address;
 use App\Models\Clothe;
+use App\Models\Order;
 use App\Models\SubCollection;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -10,6 +12,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\Console\Input\Input;
+
+use function PHPUnit\Framework\isNull;
 
 class UserController extends Controller
 {
@@ -35,7 +39,6 @@ class UserController extends Controller
         // Return the view with the cookie attached to the response
         return response()->view('admin.main')->withCookie($cookie);
     }
-
 
     public function frontLogin()
     {
@@ -135,7 +138,61 @@ class UserController extends Controller
 
     public function userProfile()
     {
-        return view('Layouts.profile');
+        return view('Layouts.profile.index');
+    }
+
+    public function userEdit()
+    {
+        return view('Layouts.profile.editProfile');
+    }
+
+    public function userUpdate(Request $request)
+    {
+        // return isNull($request->address);
+
+        if (empty($request->address) && empty($request->phone)) {
+            $user = User::find(auth()->user()->id);
+            $user->update([
+                'first_name' => $request->first_name,
+                'second_name' => $request->second_name,
+                'email' => $request->second_name,
+            ]);
+        } else {
+            $user = User::find(auth()->user()->id);
+            $address = Address::where('user_id', auth()->user()->id)->first();
+
+            $user->update([
+                'first_name' => $request->first_name,
+                'second_name' => $request->second_name,
+                'email' => $request->email,
+            ]);
+
+            $address->update([
+                'address' => $request->address,
+                'phone' => $request->phone
+            ]);
+        }
+
+        return redirect()->route('user.profile');
+    }
+
+    public function orders()
+    {
+        $currentOrders = Order::with('clothe')
+            ->where('user_id', auth()->user()->id)
+            ->where('order_status', '!=', 'Delivered')
+            ->get();
+        return view('Layouts.profile.orders', compact('currentOrders'));
+    }
+
+    public function ordersHistory()
+    {
+        $completedOrders = Order::with('clothe')
+            ->where('user_id', auth()->user()->id)
+            ->where('order_status', '=', 'Delivered')
+            ->get();
+
+        return view('Layouts.profile.history', compact('completedOrders'));
     }
 
     public function users()

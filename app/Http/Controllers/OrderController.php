@@ -13,13 +13,13 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        $purchase = Order::with('clothe', 'color', 'size')
-            ->where('user_id', auth()->user()->id)
-            ->get();
-        return view('Layouts.purchased', compact('purchase'));
-    }
+    // public function index()
+    // {
+    //     $purchase = Order::with('clothe', 'color', 'size')
+    //         ->where('user_id', auth()->user()->id)
+    //         ->get();
+    //     return view('Layouts.purchased', compact('purchase'));
+    // }
 
     public function orders()
     {

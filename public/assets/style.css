@@ -90,8 +90,8 @@ header {
 }
 
 .header {
-    position: sticky;
-    top: 0;
+    /* position: sticky;
+    top: 0; */
     z-index: 99;
     background-color: white;
 }
@@ -594,6 +594,10 @@ fieldset legend {
 }
 
 @media (max-width: 1400px) {
+    .products_container {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
     .product_card {
         min-width: 14rem;
     }
@@ -730,6 +734,10 @@ fieldset legend {
 
     .footer_email_input input {
         width: 100%;
+    }
+
+    .heading a {
+        display: none;
     }
 }
 

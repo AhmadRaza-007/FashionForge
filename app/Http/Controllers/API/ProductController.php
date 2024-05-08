@@ -12,7 +12,15 @@ class ProductController extends Controller
     {
         return response()->json([
             'message' => 'success',
-            'subCollections' => Clothe::with('productImages', 'color', 'size', 'gifts')->get()
+            'subCollections' => Clothe::with('productImages', 'color', 'size', 'gifts', 'reviews')->get()
+        ]);
+    }
+
+    public function productById($productId)
+    {
+        return response()->json([
+            'message' => 'success',
+            'subCollections' => Clothe::with('productImages', 'color', 'size', 'gifts', 'reviews')->whereId($productId)->first()
         ]);
     }
 }

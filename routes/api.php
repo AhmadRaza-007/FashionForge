@@ -4,6 +4,7 @@ use App\Http\Controllers\API\AuthenticationController;
 use App\Http\Controllers\API\CartController;
 use App\Http\Controllers\API\CollectionController;
 use App\Http\Controllers\API\ProductController;
+use App\Http\Controllers\API\ReviewController;
 use App\Http\Controllers\API\SubCollectionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -47,3 +48,9 @@ Route::get('subcollectionsWithProducts', [SubCollectionController::class, 'subco
 
 //////////////////////////////  For Products  //////////////////////////////////
 Route::get('products', [ProductController::class, 'products']);
+Route::get('/product/{product_id}', [ProductController::class, 'productById']);
+
+
+//////////////////////////////  For Product Review  //////////////////////////////////
+Route::post('/reviews', [ReviewController::class, 'products']);
+

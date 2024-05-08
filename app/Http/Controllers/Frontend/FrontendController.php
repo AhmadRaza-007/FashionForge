@@ -233,7 +233,7 @@ class FrontendController extends Controller
                     'clothe_id' => $value['product'][$i],
                     'size_id' => $value['size'][$i],
                     'color_id' => $value['color'][$i],
-                    'gift_id' => $value['gift_id'][$i],
+                    'gift_id' => $value['gift_id'][$i] ?? null,
                     'quantity' => $value['quantity'][$i],
                     'price' => $value['price'][$i] * $value['quantity'][$i],
                     'total_price' => $total_price,
@@ -247,7 +247,7 @@ class FrontendController extends Controller
         }
 
         toastr()->addSuccess('Order Placed Successfully');
-        return redirect()->route('user.purchased');
+        return redirect()->route('user.currentOrders');
     }
 
     public function address()

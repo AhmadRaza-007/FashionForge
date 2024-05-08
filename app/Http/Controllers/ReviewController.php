@@ -23,4 +23,9 @@ class ReviewController extends Controller
         toastr()->addSuccess('Review Added Successfully');
         return redirect()->back();
     }
+
+    public function getProductReviews($id){
+        $reviews = Review::where('product_id', $id)->get();
+        return response()->json($reviews);
+    }
 }

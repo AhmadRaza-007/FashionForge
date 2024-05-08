@@ -125,13 +125,6 @@
             display: block;
             transition: opacity .25s;
         }
-
-
-
-        /* input.star:checked~.rev-box {
-                                                                                height: 125px;
-                                                                                overflow: visible;
-                                                                            } */
     </style>
     <div class="container" id="women">
         <section class="women_products" id="womenProducts">
@@ -292,13 +285,15 @@
                     {{-- </form> --}}
                 </form>
 
-                <div class="cont">
+                <div class="cont d-flex flex-column">
                     <h3>Customer Reviews</h3>
                     <h1>{{ number_format($overallRating, 1) }} / 5</h1>
                     <span class="text-light">{{ count($product->reviews) }} Reviews</span>
+                    <div type="button" class="btn btn-primary m-auto mt-4" id="postReview" style="width: 8rem;">Post a
+                        review</div>
                 </div>
 
-                <div class="cont">
+                <div class="cont d-none" id="postReviewSection">
                     <h2>Review</h2>
                     <div class="stars">
                         <form action="{{ route('review', $product->id) }}" method="POST" style="width: 100%;">
@@ -330,42 +325,40 @@
                     </div>
                 </div>
 
-                <table id="datatablesSimple">
-                    {{-- <thead>
-                        <tr>hello</tr>
-                    </thead> --}}
-                    <tbody>
-                        @foreach ($product->reviews as $review)
-                            <tr class="" style="text-align: left; padding: 2rem;">
-                                <td class="d-flex justify-content-center">
-                                    <div class="cont text-light" style="margin: 0px 0px 0px 0px;">
-                                        <div class="d-flex">
-                                            <div class="text-dark bg-light d-flex justify-content-center align-items-center  mx-3"
-                                                style="width: 3rem; height: 3rem;border-radius: 50%">
-                                                {{ substr($review->name, 0, 1) }}
-                                            </div>
+                <div class="section  d-flex flex-column">
+                    <div class="section" id="reviewSection">
+                        @foreach ($product->reviews->take(5) as $review)
+                            <div class="cont">
+                                <!-- Review content -->
+                                <div class="d-flex">
+                                    <div class="text-dark bg-light d-flex justify-content-center align-items-center  mx-3"
+                                        style="width: 3rem; height: 3rem;border-radius: 50%">
+                                        {{ substr($review->name, 0, 1) }}
+                                    </div>
 
-                                            <div class="">
-                                                <h5 style="text-align: left;">
-                                                    <strong class="text-light">{{ $review->name }}</strong>
-                                                </h5>
+                                    <div class="">
+                                        <h5 style="text-align: left;">
+                                            <strong class="text-light">{{ $review->name }}</strong>
+                                        </h5>
 
-                                                <div class="" style="display: flex;">
-                                                    @for ($rating = 0; $rating < $review->rating; $rating++)
-                                                        <i class="fa-solid fa-star" style="color: #FFD43B;"></i>
-                                                    @endfor
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="mt-5 mx-3" style="text-align: left;">
-                                            <span class="text-light">{{ $review->review }}</span>
+                                        <div class="" style="display: flex;">
+                                            @for ($rating = 0; $rating < $review->rating; $rating++)
+                                                <i class="fa-solid fa-star" style="color: #FFD43B;"></i>
+                                            @endfor
                                         </div>
                                     </div>
-                                </td>
-                            </tr>
+                                </div>
+                                <div class="mt-5 mx-3" style="text-align: left;">
+                                    <span class="text-light">{{ $review->review }}</span>
+                                </div>
+                            </div>
                         @endforeach
-                    </tbody>
-                </table>
+                    </div>
+                    @if (count($product->reviews) > 5)
+                        <button id="loadMoreBtn" class="btn btn-primary rounded-pill m-auto"
+                            onclick="loadMoreReviews(this)">Load More</button>
+                    @endif
+                </div>
             @endforeach
         </section>
     </div>
@@ -401,7 +394,6 @@
 
         let buyNow = document.getElementById('buyNow')
         console.log(buyNow);
-
 
         var radioButtons = document.querySelectorAll('.gift_radio_buttons');
         // Attach event listener to each radio button
@@ -500,5 +492,64 @@
 
             return true; // Allow form submission
         }
+    </script>
+
+    <script>
+        function generateStarIcons(rating) {
+            let starsHtml = '';
+            for (let i = 0; i < rating; i++) {
+                starsHtml += `<i class="fa-solid fa-star" style="color: #FFD43B;"></i>`;
+            }
+            return starsHtml;
+        }
+
+        function loadMoreReviews(button) {
+            // Fetch all reviews via AJAX
+            fetch('/get-product-reviews/' + {{ $product->id }})
+                .then(response => response.json())
+                .then(data => {
+                    const reviewSection = document.getElementById('reviewSection');
+
+                    // Clear existing reviews
+                    reviewSection.innerHTML = '';
+
+                    // Loop through all reviews and append to the reviewSection
+                    // console.log(data);
+                    data.forEach(review => {
+                        // console.log(data);
+                        const reviewElement = `
+                        <div class="cont">
+                            <!-- Review content -->
+                            <div class="d-flex">
+                                    <div class="text-dark bg-light d-flex justify-content-center align-items-center  mx-3"
+                                        style="width: 3rem; height: 3rem;border-radius: 50%">
+                                        ${review.name.substr(0, 1)}
+                                    </div>
+
+                                    <div class="">
+                                        <h5 style="text-align: left;">
+                                            <strong class="text-light">${review.name}</strong>
+                                        </h5>
+
+                                        <div class="" style="display: flex;">
+                                            ${generateStarIcons(review.rating)}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-5 mx-3" style="text-align: left;">
+                                    <span class="text-light">${review.review}</span>
+                                </div>
+                        </div>
+                    `;
+                        reviewSection.innerHTML += reviewElement;
+                    });
+                });
+            button.style.display = 'none';
+        }
+
+        let postReview = document.getElementById('postReview')
+        postReview.addEventListener('click', (e) => {
+            document.getElementById('postReviewSection').classList.toggle('d-none');
+        });
     </script>
 @endsection

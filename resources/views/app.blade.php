@@ -25,12 +25,16 @@
     <!--    Data Tables     -->
     <link href="{{ asset('dataTables/datatablestyle.css') }}" rel="stylesheet" />
 
-    <title>Document</title>
+    <title>Fashion Forge | New Fashion | Outfits</title>
+
 </head>
 
 <body>
 
-    @include('Layouts.include.header')
+    <div style="position: sticky;top: 0;z-index: 9999;">
+        @include('includes.topHeadLine')
+        @include('Layouts.include.header')
+    </div>
     @yield('content')
     @include('Layouts.include.footer')
 

@@ -52,6 +52,7 @@ Route::post('/post/signup', [UserController::class, 'postFrontSignup'])->name('u
 
 //////////////////////////////  User Login Routes  //////////////////////////////////
 Route::post('/review/{product_id}', [ReviewController::class, 'review'])->name('review');
+Route::get('/get-product-reviews/{product_id}', [ReviewController::class, 'getProductReviews'])->name('getProductReviews');
 
 //////////////////////////////  Admin Login Routes  //////////////////////////////////
 Route::redirect('/', '/home', 301);
@@ -68,7 +69,7 @@ Route::get('/cart', [FrontendController::class, 'cart'])->name('user.cart');
 Route::post('/cartIncrement/{id}', [FrontendController::class, 'cartIncrement'])->name('user.cartIncrement');
 Route::get('/cartDelete/{id}', [FrontendController::class, 'cartDelete'])->name('user.cartDelete');
 // Route::post('/postBuy/{id}', [FrontendController::class, 'postCart'])->name('user.postBuy');
-Route::get('/purchased', [OrderController::class, 'index'])->name('user.purchased');
+// Route::get('/purchased', [OrderController::class, 'index'])->name('user.purchased');
 Route::get('/address', [FrontendController::class, 'address'])->name('user.address');
 
 Route::get('/gifts', [FrontendController::class, 'gifts'])->name('user.gifts');
@@ -140,6 +141,10 @@ Route::group(['middleware' => 'auth', 'middleware' => 'AdminCheck'], function ()
 
 Route::group(['middleware' => 'UserAuth'], function () {
     Route::get('/user', [UserController::class, 'userProfile'])->name('user.profile');
+    Route::get('/user-edit', [UserController::class, 'userEdit'])->name('user.edit');
+    Route::get('/user-update', [UserController::class, 'userUpdate'])->name('user.update');
+    Route::get('/user/orders', [UserController::class, 'orders'])->name('user.currentOrders');
+    Route::get('/user/order-history', [UserController::class, 'ordersHistory'])->name('user.ordersHistory');
 });
 
 Route::get('/setTheme', [UserController::class, 'setTheme'])->name('setTheme');
