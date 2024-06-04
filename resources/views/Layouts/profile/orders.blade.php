@@ -15,9 +15,6 @@
         }
 
         * {
-            /* color:var(--text-color); */
-            /* font-family: 'Open Sans', sans-serif;
-                                                                        font-family: 'Poppins', sans-serif; */
             padding: 0;
             margin: 0;
             box-sizing: border-box;
@@ -283,8 +280,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <span
-                                            class="d-inline">{{ $order->quantity }}</span>
+                                        <span class="d-inline">{{ $order->quantity }}</span>
                                     </td>
                                     <td>
                                         <div class="">

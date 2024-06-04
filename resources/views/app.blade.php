@@ -31,15 +31,15 @@
 
 <body>
 
-    <div style="position: sticky;top: 0;z-index: 9999;">
-        @include('includes.topHeadLine')
+    @include('Layouts.include.topHeadLine')
+    <div style="z-index: 9999;">
         @include('Layouts.include.header')
     </div>
     @yield('content')
     @include('Layouts.include.footer')
 
 
-    <script src="{{ asset('assets/bannerSlider/slider.js') }}"></script>
+    {{-- <script src="{{ asset('assets/bannerSlider/slider.js') }}"></script> --}}
     <script src="{{ asset('assets/script.js') }}"></script>
 
     <!-- <script>

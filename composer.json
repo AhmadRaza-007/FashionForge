@@ -20,7 +20,8 @@
         "laravel/tinker": "^2.5",
         "nao-pon/flysystem-google-drive": "~1.1",
         "php-flasher/flasher-toastr-laravel": "^1.15",
-        "pion/laravel-chunk-upload": "^1.5"
+        "pion/laravel-chunk-upload": "^1.5",
+        "twbs/bootstrap-icons": "^1.11"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
